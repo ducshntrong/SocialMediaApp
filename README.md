@@ -1,5 +1,5 @@
 # Social Media App
-Simple music listening application
+Social app is an application that allows users to connect and interact with each other
 # Preview
 Download apk: 
 <table style="width:100%">
