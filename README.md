@@ -73,5 +73,6 @@ Download apk:
 - Messenger
 - Personal features
 - JobSchedukler
+- Active state
   
 For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com 
