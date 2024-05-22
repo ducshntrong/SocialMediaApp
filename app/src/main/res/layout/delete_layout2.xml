@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/everyone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete for Everyone"
+        android:textAlignment="textEnd"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"/>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textAlignment="textEnd"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"/>
+
+    <TextView
+        android:id="@+id/deleteMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove for you"
+        android:textAlignment="textEnd"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="normal"/>
+
+</LinearLayout>

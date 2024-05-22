@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
+    tools:context=".Activity.UpdateProfileActivity">
+
+    <ImageView
+        android:id="@+id/coverPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_200mdp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_100mdp"
+        android:layout_height="@dimen/_100mdp"
+        android:padding="2dp"
+        android:src="@drawable/avt"
+        diagonal:civ_border_color="@color/white"
+        diagonal:civ_border_width="4dp"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/coverPhoto"
+        diagonal:layout_constraintEnd_toEndOf="@+id/coverPhoto"
+        diagonal:layout_constraintStart_toStartOf="@+id/coverPhoto"
+        diagonal:layout_constraintTop_toTopOf="@+id/coverPhoto"
+        diagonal:layout_constraintVertical_bias="1.0" />
+
+
+    <ImageButton
+        android:id="@+id/pickCoverPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_image"
+        android:background="@android:color/transparent"
+        diagonal:layout_constraintBottom_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintStart_toStartOf="@+id/coverPhoto"
+        diagonal:tint="@color/white" />
+
+    <View
+        android:id="@+id/cameraView"
+        android:layout_width="@dimen/_25mdp"
+        android:layout_height="@dimen/_25mdp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#101010"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintHorizontal_bias="0.91"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="0.94" />
+
+    <ImageButton
+        android:id="@+id/imgCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_camera24"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintHorizontal_bias="0.86"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="0.90999997"
+        diagonal:tint="#D0D1D0"
+        android:background="@android:color/transparent"/>
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        diagonal:srcCompat="@drawable/ic_back" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/basic"
+        android:text="Edit Profile"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15font_mdp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/back"
+        app:layout_constraintEnd_toStartOf="@+id/save"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@+id/back" />
+
+    <ImageView
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/baseline_save_24"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView9"
+        app:tint="@color/white" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/input_text_bg2"
+        android:paddingStart="15dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/coverPhoto"
+        app:layout_constraintStart_toStartOf="@+id/coverPhoto"
+        app:layout_constraintTop_toBottomOf="@+id/coverPhoto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Name"
+            android:paddingBottom="5dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/input_text_bg2"
+        android:paddingStart="15dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/profession"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Profession"
+            android:paddingBottom="5dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/input_text_bg2"
+        android:paddingStart="15dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout4"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Phone"
+            android:inputType="phone"
+            android:paddingBottom="5dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/input_text_bg2"
+        android:paddingStart="15dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout5"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/birthdayEdt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="Birthday"
+            android:inputType="date"
+            android:paddingBottom="5dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/input_text_bg2"
+        android:paddingStart="8dp"
+        android:paddingTop="11dp"
+        android:paddingBottom="11dp"
+        app:layout_constraintEnd_toEndOf="@+id/textInputLayout6"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+
+        <Spinner
+            android:id="@+id/genderSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:entries="@array/gender_options"
+            android:hint="Gender" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

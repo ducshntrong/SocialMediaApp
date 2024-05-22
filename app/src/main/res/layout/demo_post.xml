@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp">
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="@dimen/_40mdp"
+            android:layout_height="@dimen/_40mdp"
+            android:background="@drawable/circle"
+            android:backgroundTint="#EAEAEA"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="120dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:background="#EAEAEA"
+            app:layout_constraintBottom_toTopOf="@+id/view14"
+            app:layout_constraintStart_toEndOf="@+id/view11"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="80dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="4dp"
+            android:background="#EAEAEA"
+            app:layout_constraintBottom_toBottomOf="@+id/view11"
+            app:layout_constraintStart_toStartOf="@+id/view13"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <View
+            android:id="@+id/view19"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_170mdp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/follow_action_btn"
+            android:backgroundTint="#EAEAEA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/view11"
+            app:layout_constraintTop_toBottomOf="@+id/view11" />
+
+        <View
+            android:id="@+id/view18"
+            android:layout_width="0dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="8dp"
+            android:background="#EAEAEA"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/view19"
+            app:layout_constraintTop_toBottomOf="@+id/view19" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>
