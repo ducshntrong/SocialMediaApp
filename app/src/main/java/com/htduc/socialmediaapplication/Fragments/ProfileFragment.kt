@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -27,11 +29,16 @@ import com.htduc.socialmediaapplication.Model.Post
 import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
+import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.FragmentProfileBinding
 import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var profileViewModel: ProfileViewModel
     private lateinit var followAdapter: FollowAdapter
     private var listFollowers = arrayListOf<Follow>()
     private lateinit var storage: FirebaseStorage
@@ -59,38 +66,60 @@ class ProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
+        fragmentViewModel = ViewModelProviders.of(this,
+            FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
+        profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //show followers
         followAdapter = FollowAdapter(requireContext(), listFollowers)
         binding.friendRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.friendRv.setHasFixedSize(true)
         binding.friendRv.adapter = followAdapter
-        database.reference.child("Users").child(auth.uid!!).child("followers")
-            .addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    listFollowers.clear()
-                    if (snapshot.exists()){
-                        for (dataSnap in snapshot.children){
-                            val follow = dataSnap.getValue(Follow::class.java)
-                            listFollowers.add(follow!!)
-                        }
-                        followAdapter.setFollowList(listFollowers)
-                    }
-                }
+        profileViewModel.listFollow.observe(viewLifecycleOwner){follow->
+            followAdapter.setFollowList(follow)
+        }
+        profileViewModel.fetchFollowers(auth.uid!!)
 
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
+        fragmentViewModel.user.observe(viewLifecycleOwner){user->
+            if (user != null){
+                Picasso.get()
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable.avt)
+                    .into(binding.profileImage)
+                Picasso.get()
+                    .load(user.coverPhoto)
+                    .placeholder(R.drawable.placeholder)
+                    .into(binding.coverPhoto)
+                binding.userName.text = user.name
+                binding.nickname.text = user.profession
+                binding.followers.text = user.followerCount.toString()
+            }
+        }
+        fragmentViewModel.setProfileUser(auth.uid!!)
 
-            })
+        //show post
+        postAdapter = PostAdapter(requireContext(), currentUserPostList)
+        binding.postRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        binding.postRv.isNestedScrollingEnabled = false
+        binding.postRv.setHasFixedSize(true)
+        binding.postRv.adapter = postAdapter
+        profileViewModel.currentUserPostList.observe(viewLifecycleOwner){post->
+            postAdapter.setPostList(post)
+        }
+        profileViewModel.totalLikes.observe(viewLifecycleOwner) { totalLikes ->
+            binding.countLike.text = totalLikes.toString()
+        }
 
-        setProfileUser()
-        showMyPost()
+        profileViewModel.countPosts.observe(viewLifecycleOwner) { countPosts ->
+            binding.countPost.text = countPosts.toString()
+        }
+        profileViewModel.showUserPost(auth.uid!!)
         //getCountImage()
 
         val pickCoverPhoto = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -99,27 +128,11 @@ class ProfileFragment : Fragment() {
             // Xử lý ảnh đã chọn ở đây
             if (coverPhoto != null) {
                 dialog?.show()
-                val reference = storage.reference.child("CoverPhoto").child(auth.uid!!)
-                reference.putFile(coverPhoto!!)
-                    .addOnSuccessListener { task ->
-                        task.metadata!!.reference!!.downloadUrl
-                            .addOnSuccessListener { url ->
-                                val imageUrl = url.toString()
-                                val uid = auth.uid
-                                database.reference.child("Users").child(uid!!)
-                                    .child("coverPhoto").setValue(imageUrl)
-                                    .addOnCompleteListener {
-                                        dialog?.dismiss()
-                                    }
-                                    .addOnFailureListener { err ->
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Error ${err.message}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            }
+                profileViewModel.uploadCoverPhoto(coverPhoto!!){isSuccess->
+                    if (isSuccess){
+                        dialog?.dismiss()
                     }
+                }
             }
         }
         applyClickAnimation(requireContext(), binding.pickCoverPhoto) {
@@ -131,27 +144,11 @@ class ProfileFragment : Fragment() {
             // Xử lý ảnh đã chọn ở đây
             if (profilePhoto != null) {
                 dialog?.show()
-                val reference = storage.reference.child("ProfilePhoto").child(auth.uid!!)
-                reference.putFile(profilePhoto!!)
-                    .addOnSuccessListener { task ->
-                        task.metadata!!.reference!!.downloadUrl
-                            .addOnSuccessListener { url ->
-                                val imageUrl = url.toString()
-                                val uid = auth.uid
-                                database.reference.child("Users").child(uid!!)
-                                    .child("profilePhoto").setValue(imageUrl)
-                                    .addOnCompleteListener {
-                                        dialog?.dismiss()
-                                    }
-                                    .addOnFailureListener { err ->
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Error ${err.message}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            }
+                profileViewModel.uploadProfilePhoto(profilePhoto!!){isSuccess->
+                    if (isSuccess){
+                        dialog?.dismiss()
                     }
+                }
             }
         }
         applyClickAnimation(requireContext(), binding.imgCamera){
@@ -184,73 +181,5 @@ class ProfileFragment : Fragment() {
 //            }
 //    }
 
-    private fun showMyPost() {
-        postAdapter = PostAdapter(requireContext(), currentUserPostList)
-        binding.postRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        binding.postRv.isNestedScrollingEnabled = false
-        binding.postRv.setHasFixedSize(true)
-        binding.postRv.adapter = postAdapter
-        val currentUserUid = auth.uid
-        var totalLikes = 0
-        var countPosts = 0
-        database.reference.child("posts").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                currentUserPostList.clear()
-                if (snapshot.exists()) {
-                    for (dataSnapshot in snapshot.children) {
-                        val post = dataSnapshot.getValue(Post::class.java)
-                        if (post?.postedBy == currentUserUid) {
-                            //ktr nếu postedBy(id của ng post bài) trùng với id người dùng thì thêm vào ds
-                            //nghĩa là chỉ show các post tương ứng với user
-                            post!!.postId = dataSnapshot.key
-                            totalLikes += post.postLike
-                            currentUserPostList.add(post)
-                            countPosts++
-                        }
-                    }
-                    postAdapter.setPostList(currentUserPostList)
-                    binding.countLike.text = totalLikes.toString()
-                    binding.countPost.text = countPosts.toString()
-                }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Xử lý khi có lỗi
-            }
-        })
-    }
-
-    private fun setProfileUser() {
-        database.reference.child("Users").child(auth.uid!!)
-            .addListenerForSingleValueEvent(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()){
-                        val user = snapshot.getValue(User::class.java)
-                        if (user != null){
-                            Picasso.get()
-                                .load(user.profilePhoto)
-                                .placeholder(R.drawable.avt)
-                                .into(binding.profileImage)
-                            Picasso.get()
-                                .load(user.coverPhoto)
-                                .placeholder(R.drawable.placeholder)
-                                .into(binding.coverPhoto)
-                            binding.userName.text = user.name
-                            binding.nickname.text = user.profession
-                            binding.followers.text = user.followerCount.toString()
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setProfileUser()
-    }
 }

@@ -3,8 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -51,6 +54,9 @@
         <service
             android:name=".DeleteStoryJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".NotificationService"/>
+        <receiver android:name=".NotificationBr"
+            android:enabled="true"/>
 
         <meta-data
             android:name="preloaded_fonts"

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +23,8 @@ import com.htduc.socialmediaapplication.Model.Post
 import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
+import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentAddPostBinding
 import com.squareup.picasso.Picasso
 import java.util.Date
@@ -29,11 +32,10 @@ import java.util.Date
 
 class AddPostFragment : Fragment() {
     private lateinit var binding: FragmentAddPostBinding
-    private lateinit var storage: FirebaseStorage
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: FirebaseDatabase
     private var selectedImage: Uri? = null
     private var dialog: ProgressDialog? = null
+    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,15 +53,25 @@ class AddPostFragment : Fragment() {
         dialog?.setCancelable(false)
         dialog?.setCanceledOnTouchOutside(false)
         auth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance()
-        storage = FirebaseStorage.getInstance()
+        fragmentViewModel = ViewModelProviders.of(this,
+            FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setProfileUser()
+        fragmentViewModel.user.observe(viewLifecycleOwner){user->
+            if (user!=null){
+                Picasso.get()
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable.avt)
+                    .into(binding.profileImage)
+                binding.username.text = user.name
+                binding.profession.text = user.profession
+            }
+        }
+        fragmentViewModel.setProfileUser(auth.uid!!)
 
         val imagePickCallback = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             selectedImage = uri
@@ -101,79 +113,16 @@ class AddPostFragment : Fragment() {
         })
 
         binding.btnPost.setOnClickListener {
-            uploadPost()
-        }
-
-    }
-
-    private fun uploadPost() {
-        val reference = storage.reference.child("posts").child(auth.uid!!)
-            .child(Date().time.toString())
-        dialog?.show()
-
-        if (selectedImage != null) {
-            reference.putFile(selectedImage!!)
-                .addOnSuccessListener { task ->
-                    task.metadata?.reference?.downloadUrl
-                        ?.addOnSuccessListener { url ->
-                            val imageUrl = url.toString()
-                            val post = Post()
-                            post.postImage = imageUrl
-                            post.postedBy = auth.uid
-                            post.postDescription = binding.postDescription.text.toString()
-                            post.postedAt = Date().time
-
-                            database.reference.child("posts")
-                                .push()//push() được sd để tạo một khóa con duy nhất cho một nút trong csdl
-                                .setValue(post)
-                                .addOnSuccessListener {
-                                    dialog?.dismiss()
-                                    Toast.makeText(requireContext(), "Posted Successfully", Toast.LENGTH_SHORT).show()
-                                    binding.postDescription.setText("")
-                                    binding.postImg.visibility = View.GONE
-                                }
-                        }
-                }
-        } else {
-            val post = Post()
-            post.postImage = ""
-            post.postedBy = auth.uid
-            post.postDescription = binding.postDescription.text.toString()
-            post.postedAt = Date().time
-
-            database.reference.child("posts")
-                .push()
-                .setValue(post)
-                .addOnSuccessListener {
+            dialog?.show()
+            fragmentViewModel.uploadPost(selectedImage,binding.postDescription.text.toString()){isSuccess->
+                if (isSuccess){
                     dialog?.dismiss()
                     Toast.makeText(requireContext(), "Posted Successfully", Toast.LENGTH_SHORT).show()
                     binding.postDescription.setText("")
+                    binding.postImg.visibility = View.GONE
                 }
+            }
         }
+
     }
-
-    private fun setProfileUser() {
-        database.reference.child("Users").child(auth.uid!!)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()){
-                        val user = snapshot.getValue(User::class.java)
-                        if (user != null){
-                            Picasso.get()
-                                .load(user.profilePhoto)
-                                .placeholder(R.drawable.avt)
-                                .into(binding.profileImage)
-                            binding.username.text = user.name
-                            binding.profession.text = user.profession
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-    }
-
 }

@@ -8,12 +8,17 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.htduc.socialmediaapplication.Fragments.AddPostFragment
 import com.htduc.socialmediaapplication.Fragments.HomeFragment
 import com.htduc.socialmediaapplication.Fragments.NotificationFragment
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
 import com.htduc.socialmediaapplication.Fragments.SearchFragment
+import com.htduc.socialmediaapplication.Model.Notification
+import com.htduc.socialmediaapplication.NotificationBr
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
 import com.iammert.library.readablebottombar.ReadableBottomBar
@@ -98,4 +103,34 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         database.reference.child("presence").child(currentId!!).setValue("Offline")
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        database.reference.child("notification").child(auth.uid!!)
+//            .addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    if (snapshot.exists()){
+//                        for (dataSnap in snapshot.children){
+//                            val notification = dataSnap.getValue(Notification::class.java)
+//                            if (notification != null){
+//                                notification.notificationId = dataSnap.key
+//                                sendNotification(notification)
+//                            }
+//                        }
+//                    }
+//                }
+//                override fun onCancelled(error: DatabaseError) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            })
+//    }
+//
+//    private fun sendNotification(notification: Notification) {
+//        val intent = Intent(this, NotificationBr::class.java)
+//        val bundle = Bundle()
+//        bundle.putParcelable("notification", notification)
+//        intent.putExtras(bundle)
+//        sendBroadcast(intent)
+//    }
 }
