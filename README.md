@@ -30,7 +30,7 @@ Download apk:
   <tr>
     <td><img src="screenshots/img17.jpg"/></td>
     <td><img src="screenshots/img18.jpg"/></td>
-    <td><img src="screenshots/img19.jpg"/></td>
+    <td><img src="screenshots/img25.png"/></td>
     <td><img src="screenshots/img20.png"/></td>
   </tr>
   <tr>
