@@ -196,7 +196,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
     }
 
 
-    fun deleteNote(userId: String, onDeleteComplete: (Boolean) -> Unit) {
+    fun deleteNote(userId: String, onDeleteComplete: (Boolean) -> Unit) {//
         val dbRef = database.reference.child("Notes").child(userId)
 
         dbRef.removeValue() // Xóa toàn bộ node Notes/userId
