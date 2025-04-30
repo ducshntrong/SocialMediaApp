@@ -4,35 +4,27 @@ import android.app.ProgressDialog
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Adapter.CommentAdapter
 import com.htduc.socialmediaapplication.Model.Comment
-import com.htduc.socialmediaapplication.Model.Notification
-import com.htduc.socialmediaapplication.Model.Post
 import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.ViewModel.CommentViewModel
+import com.htduc.socialmediaapplication.factory.CommentViewmodelFactory
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.ActivityCommentBinding
 import com.squareup.picasso.Picasso
-import java.util.Date
 
 class CommentActivity : AppCompatActivity() {
     private lateinit var binding : ActivityCommentBinding
@@ -47,6 +39,7 @@ class CommentActivity : AppCompatActivity() {
     private var listComment = arrayListOf<Comment>()
     private lateinit var fragmentViewModel: FragmentViewModel
     private lateinit var commentViewModel: CommentViewModel
+    private lateinit var userModerationManager: UserModerationManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,9 +57,14 @@ class CommentActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
-        fragmentViewModel = ViewModelProviders.of(this,
-            FragmentViewModelFactory(this.application))[FragmentViewModel::class.java]
-        commentViewModel = ViewModelProvider(this)[CommentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(application, this)
+        )[FragmentViewModel::class.java]
+        //commentViewModel = ViewModelProvider(this)[CommentViewModel::class.java]
+        commentViewModel = ViewModelProvider(this, CommentViewmodelFactory(this))[CommentViewModel::class.java]
+
+        userModerationManager = UserModerationManager(database, this)
 
         postId = intent.getStringExtra("postId")
         postedBy = intent.getStringExtra("postedBy")
@@ -94,6 +92,21 @@ class CommentActivity : AppCompatActivity() {
         }
         commentViewModel.showListComment(postId!!)
 
+        // Lấy thông tin người dùng từ Firebase
+        val userRef = FirebaseDatabase.getInstance().reference.child("Users").child(auth.uid!!)
+        userRef.get().addOnSuccessListener { snapshot ->
+            val currentUser = snapshot.getValue(User::class.java)
+            if (currentUser != null ){
+                if (userModerationManager.canSendMessage(currentUser)){
+                    binding.linear02.visibility = View.VISIBLE
+                    binding.alert.visibility = View.GONE
+                } else{
+                    binding.linear02.visibility = View.GONE
+                    binding.alert.visibility = View.VISIBLE
+                }
+            }
+        }
+
         applyClickAnimation(this, binding.btnSend){
             val edtMessage = binding.edtMessage.text.toString().trim()
             if (edtMessage.isNotEmpty() || selectedImgCmt != null){
@@ -112,7 +125,6 @@ class CommentActivity : AppCompatActivity() {
 
         val imagePickCallback = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             selectedImgCmt = uri
-            // Xử lý ảnh đã chọn ở đây
             if (selectedImgCmt != null) {
                 binding.cmtImg.setImageURI(selectedImgCmt)
                 binding.cmtImg.visibility = View.VISIBLE
@@ -155,6 +167,11 @@ class CommentActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         finish()
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userModerationManager.checkAndUnblockUser(auth.uid!!)
     }
 
 }

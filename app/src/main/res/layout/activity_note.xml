@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.NoteActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avt_image"
+        android:layout_width="@dimen/_40mdp"
+        android:layout_height="@dimen/_40mdp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:padding="2dp"
+        android:src="@drawable/img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Huynh Trong Duc"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12font_mdp"
+        app:layout_constraintBottom_toBottomOf="@+id/avt_image"
+        app:layout_constraintStart_toEndOf="@+id/avt_image"
+        app:layout_constraintTop_toTopOf="@+id/avt_image" />
+
+
+    <TextView
+        android:id="@+id/timeNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="3 gio truoc"
+        app:layout_constraintBottom_toBottomOf="@+id/username"
+        app:layout_constraintStart_toEndOf="@+id/username"
+        app:layout_constraintTop_toTopOf="@+id/username" />
+
+    <ImageButton
+        android:id="@+id/btnMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/avt_image"
+        app:layout_constraintEnd_toStartOf="@+id/btnClose"
+        app:layout_constraintTop_toTopOf="@+id/avt_image"
+        app:srcCompat="@drawable/ic_more_horiz" />
+
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/close_ic"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMore"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnMore" />
+
+
+    <TextView
+        android:id="@+id/txtNote"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_violation"
+        android:gravity="center"
+        android:hint="Chia sẻ suy nghĩ ..."
+        android:textColor="@color/derkGrey"
+        android:textSize="@dimen/_13mdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.36"
+        android:focusableInTouchMode="true"
+        android:focusable="true"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_65mdp"
+        android:layout_height="@dimen/_65mdp"
+        android:src="@drawable/img"
+        app:layout_constraintEnd_toEndOf="@+id/txtNote"
+        app:layout_constraintStart_toStartOf="@+id/txtNote"
+        app:layout_constraintTop_toBottomOf="@+id/txtNote" />
+
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/ic_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/txtNote"
+        app:layout_constraintEnd_toEndOf="@+id/txtNote"
+        app:layout_constraintHorizontal_bias="0.301"
+        app:layout_constraintStart_toStartOf="@+id/txtNote"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:layout_constraintVertical_bias="0.578"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_circle"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:tint="@color/white" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

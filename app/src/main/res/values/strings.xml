@@ -1,11 +1,12 @@
 <resources>
-    <string name="app_name">Social Media</string>
+    <string name="app_name">Chyme</string>
 
-    <string name="home">Home</string>
-    <string name="add">Add Post</string>
-    <string name="search">Search</string>
-    <string name="notification">Notification</string>
-    <string name="profile">Profile</string>
+    <string name="home">Trang chủ</string>
+    <string name="add">Tin</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="notification">Hộp thư</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="violation">Nội dung bạn vừa tải lên đã vi phạm quy định của chúng tôi. Vui lòng xem xét lại và đảm bảo rằng tất cả các nội dung đều phù hợp với tiêu chuẩn cộng đồng. Nếu còn tiếp tục bạn sẽ bị hạn chế sử dụng các tính năng của chúng tôi.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_story">Add Story</string>

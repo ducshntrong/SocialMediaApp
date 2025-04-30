@@ -1,26 +1,18 @@
 package com.htduc.socialmediaapplication.Activity
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityUpdateProfileBinding
 import com.squareup.picasso.Picasso
@@ -47,8 +39,10 @@ class UpdateProfileActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
-        fragmentViewModel = ViewModelProviders.of(this,
-            FragmentViewModelFactory(this.application))[FragmentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(application, this)
+        )[FragmentViewModel::class.java]
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         currentId = auth.uid
 
@@ -76,7 +70,6 @@ class UpdateProfileActivity : AppCompatActivity() {
         binding.back.setOnClickListener { finish() }
 
         val pickCoverPhoto = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            // Xử lý ảnh đã chọn ở đây
             if (it != null) {
                 binding.coverPhoto.setImageURI(it)
                 coverPhoto = it
@@ -86,7 +79,6 @@ class UpdateProfileActivity : AppCompatActivity() {
             pickCoverPhoto.launch("image/*")
         }
         val pickProfilePhoto = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            // Xử lý ảnh đã chọn ở đây
             if (it != null) {
                 binding.profileImage.setImageURI(it)
                 profilePhoto = it

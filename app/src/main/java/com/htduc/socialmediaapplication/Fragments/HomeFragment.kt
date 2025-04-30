@@ -1,6 +1,8 @@
 package com.htduc.socialmediaapplication.Fragments
 
+import android.app.ActivityOptions
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,9 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProviders
+import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.htduc.socialmediaapplication.Activity.AddPostActivity
+import com.htduc.socialmediaapplication.Activity.MessageActivity
 import com.htduc.socialmediaapplication.Adapter.PostAdapter
 import com.htduc.socialmediaapplication.Adapter.StoryAdapter
 import com.htduc.socialmediaapplication.Model.Post
@@ -19,7 +24,7 @@ import com.htduc.socialmediaapplication.Model.Story
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentHomeBinding
 import com.squareup.picasso.Picasso
 
@@ -28,8 +33,8 @@ class HomeFragment : Fragment() {
     private lateinit var fragmentViewModel: FragmentViewModel
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
-    private  var listStory = arrayListOf<Story>()
-    private  var listPost = arrayListOf<Post>()
+    private var listStory = arrayListOf<Story>()
+    private var listPost = arrayListOf<Post>()
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private var selectedImgStory: Uri? = null
     private var dialog: ProgressDialog? = null
@@ -45,7 +50,10 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        fragmentViewModel = ViewModelProviders.of(this, FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(requireActivity().application, requireContext())
+        )[FragmentViewModel::class.java]
 
         dialog = ProgressDialog(requireContext(), ProgressDialog.STYLE_SPINNER)
         dialog?.setTitle("Story Uploading")
@@ -65,27 +73,30 @@ class HomeFragment : Fragment() {
                     .load(user.profilePhoto)
                     .placeholder(R.drawable.avt)
                     .into(binding.profileImage)
+                Picasso.get()
+                    .load(user.profilePhoto)
+                    .placeholder(R.drawable.avt)
+                    .into(binding.storyImg)
             }
         }
         fragmentViewModel.setProfileUser(auth.uid!!)
 
         storyAdapter = StoryAdapter(requireContext(), listStory)
-        binding.storyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, true)
+        binding.storyRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.storyRv.setHasFixedSize(true)
         binding.storyRv.setItemViewCacheSize(13)
         binding.storyRv.isNestedScrollingEnabled = false
         binding.storyRv.adapter = storyAdapter
         fragmentViewModel.listStory.observe(viewLifecycleOwner){ story->
             storyAdapter.setStoryList(story)
-            binding.storyRv.scrollToPosition(storyAdapter.itemCount - 1)
         }
 
         binding.postRv.showShimmerAdapter()
         postAdapter = PostAdapter(requireContext(), listPost)
         binding.postRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
         binding.postRv.isNestedScrollingEnabled = false
+        binding.postRv.adapter = postAdapter
         fragmentViewModel.listPost.observe(viewLifecycleOwner){ post->
-            binding.postRv.adapter = postAdapter
             binding.postRv.hideShimmerAdapter()
             postAdapter.setPostList(post)
         }
@@ -93,7 +104,6 @@ class HomeFragment : Fragment() {
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri->
             selectedImgStory = uri
             if (selectedImgStory != null){
-                binding.storyImg.setImageURI(uri)
                 dialog?.show()
                 fragmentViewModel.uploadStory(selectedImgStory!!) { isSuccess ->
                     if (isSuccess) {
@@ -107,6 +117,23 @@ class HomeFragment : Fragment() {
         }
         binding.addStoryImg.setOnClickListener {
             galleryLauncher.launch("image/*")
+        }
+
+        applyClickAnimation(requireContext(), binding.pickImg){
+
+        }
+
+        binding.addPost.setOnClickListener {
+            val intent = Intent(context, AddPostActivity::class.java)
+            val activityOptions = ActivityOptionsCompat.makeCustomAnimation(
+                requireContext(), R.anim.slide_up, R.anim.fade_out
+            )
+            context?.startActivity(intent, activityOptions.toBundle())
+        }
+
+        applyClickAnimation(requireContext(), binding.btnMsg){
+            val intent = Intent(context, MessageActivity::class.java)
+            context?.startActivity(intent)
         }
     }
 

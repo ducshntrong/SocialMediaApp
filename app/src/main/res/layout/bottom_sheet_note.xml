@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_bg">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:src="@drawable/base_line_remove"
+        android:layout_gravity="center|top"/>
+
+
+    <TextView
+        android:id="@+id/not_interested"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Không quan tâm"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:visibility="gone"
+        android:drawableStart="@drawable/ic_not_interested"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chặn"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_light"
+        android:drawableStart="@drawable/ic_block"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Báo cáo ghi chú"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:visibility="gone"
+        android:textColor="@android:color/holo_red_light"
+        android:drawableStart="@drawable/ic_report"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xoá"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/baseline_delete_outline_24"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+</LinearLayout>

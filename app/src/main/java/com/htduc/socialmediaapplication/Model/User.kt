@@ -9,19 +9,26 @@ import android.widget.ImageButton
 import androidx.appcompat.widget.AppCompatButton
 import com.htduc.socialmediaapplication.R
 
-class User (
-    var uid:String? = null,
+data class User(
+    var uid: String? = null,
     var name: String? = null,
     var profession: String? = null,
     var email: String? = null,
     var password: String? = null,
-    var coverPhoto:String? = null,
-    var profilePhoto:String? = null,
-    var birthday:String? = null,
-    var phone:Int = 0,
-    var gender:String? = null,
-    var followerCount: Int = 0
-):Parcelable {
+    var coverPhoto: String? = null,
+    var profilePhoto: String? = null,
+    var birthday: String? = null,
+    var phone: Int = 0,
+    var gender: String? = null,
+    var followerCount: Int = 0,
+    var isFollowing: Boolean = false,
+
+    // Biến để quản lý vi phạm và trạng thái chặn người dùng
+    var violationCount: Int = 0,                     // Số lần vi phạm
+    var violationHistory: MutableList<Long> = mutableListOf(), // Lịch sử vi phạm (timestamp)
+    var isBlocked: Boolean = false,                  // Trạng thái bị chặn
+    var blockUntil: Long = 0                         // Thời gian bị chặn đến (timestamp)
+) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
@@ -33,9 +40,15 @@ class User (
         parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
-        parcel.readInt()
-    ) {
-    }
+        parcel.readInt(),
+        parcel.readByte() != 0.toByte(),
+        parcel.readInt(),
+        mutableListOf<Long>().apply {
+            parcel.readList(this, Long::class.java.classLoader)
+        },
+        parcel.readByte() != 0.toByte(),
+        parcel.readLong()
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uid)
@@ -49,6 +62,11 @@ class User (
         parcel.writeInt(phone)
         parcel.writeString(gender)
         parcel.writeInt(followerCount)
+        parcel.writeByte(if (isFollowing) 1 else 0)
+        parcel.writeInt(violationCount)
+        parcel.writeList(violationHistory)
+        parcel.writeByte(if (isBlocked) 1 else 0)
+        parcel.writeLong(blockUntil)
     }
 
     override fun describeContents(): Int {
@@ -65,6 +83,7 @@ class User (
         }
     }
 }
+
 fun applyClickAnimation(context: Context, button: ImageButton, clickHandler: () -> Unit) {
     val mAnimator = AnimatorInflater.loadAnimator(context, R.animator.button_pressed)
     button.setOnClickListener {

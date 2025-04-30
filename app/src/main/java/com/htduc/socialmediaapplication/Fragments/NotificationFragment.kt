@@ -42,8 +42,8 @@ class NotificationFragment : Fragment() {
         binding.viewPager.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
         TabLayoutMediator(binding.tabLayout, binding.viewPager){tab, pos ->
             when(pos){
-                0 -> tab.text = "NOTIFICATION"
-                else -> tab.text = "REQUEST"
+                0 -> tab.text = "Thông báo"
+                else -> tab.text = "Tin nhắn"
             }
         }.attach()
     }

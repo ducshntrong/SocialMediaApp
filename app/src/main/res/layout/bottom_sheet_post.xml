@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_bg">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:src="@drawable/base_line_remove"
+        android:layout_gravity="center|top"/>
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm vào mục yêu thích"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/save_ic"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chỉnh sửa"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/pencil"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/copy_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sao chép liên kết"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_copy"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/infor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tại sao bạn nhìn thấy bài viết này"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/information_ic"
+        android:visibility="gone"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/not_interested"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Không quan tâm"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@color/black"
+        android:drawableStart="@drawable/ic_not_interested"
+        android:visibility="gone"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chặn"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@android:color/holo_red_light"
+        android:drawableStart="@drawable/ic_block"
+        android:drawablePadding="8dp"
+        android:visibility="gone"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Báo cáo"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@android:color/holo_red_light"
+        android:drawableStart="@drawable/ic_report"
+        android:drawablePadding="8dp"
+        android:visibility="gone"
+        android:background="?attr/selectableItemBackground" />
+
+    <TextView
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xoá"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:textColor="@android:color/holo_red_light"
+        android:drawableStart="@drawable/delete_ic"
+        android:drawablePadding="8dp"
+        android:background="?attr/selectableItemBackground" />
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtNote"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_violation"
+        android:text="Viết ghi chú..."
+        android:gravity="center"
+        android:textColor="@color/derkGrey"
+        android:textSize="@dimen/_11mdp"
+        diagonal:layout_constraintStart_toStartOf="parent"
+        diagonal:layout_constraintTop_toTopOf="parent" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_60mdp"
+        android:layout_height="@dimen/_60mdp"
+        android:src="@drawable/img"
+        diagonal:layout_constraintEnd_toEndOf="@+id/txtNote"
+        diagonal:layout_constraintStart_toStartOf="@+id/txtNote"
+        diagonal:layout_constraintTop_toBottomOf="@+id/txtNote" />
+
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/ic_circle"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/txtNote"
+        diagonal:layout_constraintEnd_toEndOf="@+id/txtNote"
+        diagonal:layout_constraintHorizontal_bias="0.24"
+        diagonal:layout_constraintStart_toStartOf="@+id/txtNote"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="0.647"
+        diagonal:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_circle"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_circle"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintHorizontal_bias="1.1"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="1.0"
+        diagonal:tint="@color/white" />
+
+    <ImageButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/baseline_add_24"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/imgStatus"
+        diagonal:layout_constraintEnd_toEndOf="@+id/imgStatus"
+        diagonal:layout_constraintStart_toStartOf="@+id/imgStatus"
+        diagonal:layout_constraintTop_toTopOf="@+id/imgStatus" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tạo tin"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11font_mdp"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

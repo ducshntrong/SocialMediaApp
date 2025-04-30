@@ -5,12 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.htduc.socialmediaapplication.Adapter.NotificationAdapter
 import com.htduc.socialmediaapplication.Model.Notification
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentNotification2Binding
 
 
@@ -30,7 +30,10 @@ class Notification2Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        fragmentViewModel = ViewModelProviders.of(this, FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(requireActivity().application, requireContext())
+        )[FragmentViewModel::class.java]
         return binding.root
     }
 
@@ -43,7 +46,6 @@ class Notification2Fragment : Fragment() {
         binding.notification2Rv.adapter = notificationAdapter
         fragmentViewModel.listNotification.observe(viewLifecycleOwner){
             notificationAdapter.setNotificationList(it)
-            binding.notification2Rv.scrollToPosition(notificationAdapter.itemCount - 1)
         }
     }
 }

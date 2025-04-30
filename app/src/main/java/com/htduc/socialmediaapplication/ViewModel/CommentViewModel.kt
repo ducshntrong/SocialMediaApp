@@ -1,7 +1,9 @@
 package com.htduc.socialmediaapplication.ViewModel
 
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
+import android.content.Context
 import android.net.Uri
-import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,21 +16,22 @@ import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Model.Comment
 import com.htduc.socialmediaapplication.Model.Notification
 import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.Model.User
-import com.htduc.socialmediaapplication.R
-import com.squareup.picasso.Picasso
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
-class CommentViewModel: ViewModel() {
+class CommentViewModel(private val context: Context): ViewModel() {
     private val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     private val storage = FirebaseStorage.getInstance()
+    private val nsfwDetector = NSFWDetector(context)
 
     private val _post = MutableLiveData<Post?>()
     val post: LiveData<Post?> = _post
 
     private val _listComment = MutableLiveData<ArrayList<Comment>>()
     val listComment: LiveData<ArrayList<Comment>> = _listComment
+
+    private val userModerationManager = UserModerationManager(database, context)
 
     fun getDataOfPost(postId: String){
         database.reference.child("posts").child(postId)
@@ -75,76 +78,89 @@ class CommentViewModel: ViewModel() {
 
     fun sendComment(selectedImgCmt: Uri?, edtMessage: String, postId: String, postedBy: String,
                             onSaveCmtComplete: (Boolean)->Unit) {
-        if (selectedImgCmt != null){
-            val reference = storage.reference.child("comments")
-                .child(auth.uid!!).child(Date().time.toString())
-            reference.putFile(selectedImgCmt)
-                .addOnSuccessListener { task ->
-                    task.metadata!!.reference!!.downloadUrl
-                        .addOnSuccessListener { url ->
-                            val imageUrl = url.toString()
-                            val comment = Comment(edtMessage, Date().time, auth.uid, imageUrl)
-                            database.reference
-                                .child("posts")
-                                .child(postId)
-                                .child("comments")
-                                .push()
-                                .setValue(comment).addOnSuccessListener {
-                                    val commentCountRef = database.reference
-                                        .child("posts")
-                                        .child(postId)
-                                        .child("commentCount")
-                                    commentCountRef.addListenerForSingleValueEvent(object : ValueEventListener{
-                                        override fun onDataChange(snapshot: DataSnapshot) {
-                                            var commentCount = 0
-                                            if (snapshot.exists()){
-                                                commentCount = snapshot.getValue(Int::class.java)!!
-                                            }
-                                            commentCountRef.setValue(commentCount+1)
-                                                .addOnSuccessListener {
-                                                    onSaveCmtComplete(true)
-
-                                                    sendNotification(postedBy, postId)
+        try {
+            if (selectedImgCmt != null){
+                val nsfwScore = nsfwDetector.detectNSFW(context, selectedImgCmt)
+                if (nsfwScore < 0.70){
+                    userModerationManager.showDialogViolation()
+                    userModerationManager.handleViolation(auth.uid!!)
+                    onSaveCmtComplete(true)
+                    return
+                }
+                val reference = storage.reference.child("comments")
+                    .child(auth.uid!!).child(Date().time.toString())
+                reference.putFile(selectedImgCmt)
+                    .addOnSuccessListener { task ->
+                        task.metadata!!.reference!!.downloadUrl
+                            .addOnSuccessListener { url ->
+                                val imageUrl = url.toString()
+                                val comment = Comment(edtMessage, Date().time, auth.uid, imageUrl)
+                                database.reference
+                                    .child("posts")
+                                    .child(postId)
+                                    .child("comments")
+                                    .push()
+                                    .setValue(comment).addOnSuccessListener {
+                                        val commentCountRef = database.reference
+                                            .child("posts")
+                                            .child(postId)
+                                            .child("commentCount")
+                                        commentCountRef.addListenerForSingleValueEvent(object : ValueEventListener{
+                                            override fun onDataChange(snapshot: DataSnapshot) {
+                                                var commentCount = 0
+                                                if (snapshot.exists()){
+                                                    commentCount = snapshot.getValue(Int::class.java)!!
                                                 }
-                                        }
+                                                commentCountRef.setValue(commentCount+1)
+                                                    .addOnSuccessListener {
+                                                        onSaveCmtComplete(true)
 
-                                        override fun onCancelled(error: DatabaseError) {
-                                            TODO("Not yet implemented")
-                                        }
-                                    })
-                                }
-                        }
-                }
-        }else{
-            val comment = Comment(edtMessage, Date().time, auth.uid, "")
-            database.reference
-                .child("posts")
-                .child(postId)
-                .child("comments")
-                .push()
-                .setValue(comment).addOnSuccessListener {
-                    val commentCountRef = database.reference
-                        .child("posts")
-                        .child(postId!!)
-                        .child("commentCount")
-                    commentCountRef.addListenerForSingleValueEvent(object : ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            var commentCount = 0
-                            if (snapshot.exists()){
-                                commentCount = snapshot.getValue(Int::class.java)!!
+                                                        sendNotification(postedBy, postId)
+                                                    }
+                                            }
+
+                                            override fun onCancelled(error: DatabaseError) {
+                                                TODO("Not yet implemented")
+                                            }
+                                        })
+                                    }
                             }
-                            commentCountRef.setValue(commentCount+1)
-                                .addOnSuccessListener {
-                                    onSaveCmtComplete(true)
-                                    sendNotification(postedBy, postId)
+                    }
+            }else{
+                val comment = Comment(edtMessage, Date().time, auth.uid, "")
+                database.reference
+                    .child("posts")
+                    .child(postId)
+                    .child("comments")
+                    .push()
+                    .setValue(comment).addOnSuccessListener {
+                        val commentCountRef = database.reference
+                            .child("posts")
+                            .child(postId!!)
+                            .child("commentCount")
+                        commentCountRef.addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                var commentCount = 0
+                                if (snapshot.exists()){
+                                    commentCount = snapshot.getValue(Int::class.java)!!
                                 }
-                        }
+                                commentCountRef.setValue(commentCount+1)
+                                    .addOnSuccessListener {
+                                        onSaveCmtComplete(true)
+                                        sendNotification(postedBy, postId)
+                                    }
+                            }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-                    })
-                }
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+                    }
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(context, "Loi xu ly anh!", Toast.LENGTH_SHORT).show()
+            onSaveCmtComplete(true)
         }
     }
 

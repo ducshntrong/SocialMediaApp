@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.AddNoteActivity">
+
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/close_ic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="Ghi chú mới"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16mdp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+        app:layout_constraintStart_toEndOf="@+id/btnClose"
+        app:layout_constraintTop_toTopOf="@+id/btnClose" />
+
+    <TextView
+        android:id="@+id/shareNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chia sẻ"
+        app:layout_constraintBottom_toBottomOf="@+id/textView22"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView22"
+        android:textColor="@color/derkGrey"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
+        android:clickable="true"
+        android:enabled="false"
+        android:layout_margin="10dp"/>
+
+
+    <EditText
+        android:id="@+id/edtNote"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_violation"
+        android:gravity="center"
+        android:hint="Chia sẻ suy nghĩ ..."
+        android:textColor="@color/derkGrey"
+        android:textSize="@dimen/_13mdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.36"
+        android:focusableInTouchMode="true"
+        android:focusable="true"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_65mdp"
+        android:layout_height="@dimen/_65mdp"
+        android:src="@drawable/img"
+        app:layout_constraintEnd_toEndOf="@+id/edtNote"
+        app:layout_constraintStart_toStartOf="@+id/edtNote"
+        app:layout_constraintTop_toBottomOf="@+id/edtNote" />
+
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/ic_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/edtNote"
+        app:layout_constraintEnd_toEndOf="@+id/edtNote"
+        app:layout_constraintHorizontal_bias="0.301"
+        app:layout_constraintStart_toStartOf="@+id/edtNote"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:layout_constraintVertical_bias="0.578"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_circle"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:tint="@color/white" />
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="0/60"-->
+<!--        android:textColor="@color/derkGrey"-->
+<!--        android:textSize="@dimen/_11font_mdp"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/profile_image"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/profile_image"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_image" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>

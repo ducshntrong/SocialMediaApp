@@ -58,18 +58,18 @@ class ProfileViewModel:ViewModel() {
     }
 
     fun showUserPost(currentUserUid: String) {
-        var totalLikes = 0
-        var countPosts = 0
         database.reference.child("posts").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val mCurrentUserPostList = arrayListOf<Post>()
-                mCurrentUserPostList.clear()
+
+                // Reset lại giá trị trước khi bắt đầu tính toán lại
+                var totalLikes = 0
+                var countPosts = 0
+
                 if (snapshot.exists()) {
                     for (dataSnapshot in snapshot.children) {
                         val post = dataSnapshot.getValue(Post::class.java)
                         if (post?.postedBy == currentUserUid) {
-                            //ktr nếu postedBy(id của ng post bài) trùng với id người dùng thì thêm vào ds
-                            //nghĩa là chỉ show các post tương ứng với user
                             post.postId = dataSnapshot.key
                             totalLikes += post.postLike
                             mCurrentUserPostList.add(post)
@@ -79,6 +79,11 @@ class ProfileViewModel:ViewModel() {
                     _currentUserPostList.value = mCurrentUserPostList
                     _totalLikes.value = totalLikes
                     _countPosts.value = countPosts
+                } else {
+                    // Nếu không có bài viết, set giá trị về 0
+                    _currentUserPostList.value = arrayListOf()
+                    _totalLikes.value = 0
+                    _countPosts.value = 0
                 }
             }
 

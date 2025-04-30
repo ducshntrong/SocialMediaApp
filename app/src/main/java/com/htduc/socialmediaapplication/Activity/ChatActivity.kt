@@ -1,5 +1,7 @@
 package com.htduc.socialmediaapplication.Activity
 
+import com.htduc.socialmediaapplication.factory.ChatViewModelFactory
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Build
@@ -16,20 +18,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Adapter.MessageAdapter
 import com.htduc.socialmediaapplication.Model.Messages
 import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityChatBinding
-import java.util.Calendar
 import java.util.Date
 
 class ChatActivity : AppCompatActivity() {
@@ -49,7 +48,9 @@ class ChatActivity : AppCompatActivity() {
     private var receiveUid:String? = null
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var chatViewModel: ChatViewModel
+    private lateinit var userModerationManager: UserModerationManager
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,11 @@ class ChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-        chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
+//        chatViewModel = ViewModelProvider(this)[ChatViewModel::class.java]
+        chatViewModel = ViewModelProvider(this, ChatViewModelFactory(this))[ChatViewModel::class.java]
+
+        userModerationManager = UserModerationManager(database!!, this)
+
         currentId = auth!!.uid
 
         binding.imgBack.setOnClickListener { finish() }
@@ -83,29 +88,49 @@ class ChatActivity : AppCompatActivity() {
         binding.messageRecView.adapter = messageAdapter
         setMessageToView()
 
-        applyClickAnimation(this, binding.btnSend){
-            val messageTxt = binding.edtMessage.text.toString().trim()
-            val message = Messages(null, messageTxt, senderUid, null, Date().time)
-            if (messageTxt.isNotEmpty()){
-                binding.edtMessage.setText("")
-                chatViewModel.onClickSendMsg(message, Date().time, senderRoom!!, receiveRoom!!)
-            }else{
-                Toast.makeText(this, "Please enter something", Toast.LENGTH_SHORT).show()
+        // Lấy thông tin người dùng từ Firebase
+        val userRef = FirebaseDatabase.getInstance().reference.child("Users").child(senderUid!!)
+        userRef.get().addOnSuccessListener { snapshot ->
+            val currentUser = snapshot.getValue(User::class.java)
+            if (currentUser != null ){
+                if (userModerationManager.canSendMessage(currentUser)){
+                    binding.linear02.visibility = View.VISIBLE
+                    binding.alert.visibility = View.GONE
+                } else{
+                    binding.linear02.visibility = View.GONE
+                    binding.alert.visibility = View.VISIBLE
+                }
             }
         }
 
         val imagePickCallback = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            selectedImage = uri
-            // Xử lý ảnh đã chọn ở đây
-            if (selectedImage != null) {
-                dialog?.show()
-                chatViewModel.pickImgMessage(selectedImage!!, senderRoom!!, receiveRoom!!, senderUid!!){
-                    if (it){
-                        dialog?.dismiss()
-                    }
-                }
+            if (uri != null) {
+                selectedImage = uri
+                binding.msgImg.setImageURI(selectedImage)
+                binding.msgImg.visibility = View.VISIBLE
+//                chatViewModel.pickImgMessage(uri, senderRoom!!, receiveRoom!!, senderUid!!) { success ->
+//                    if (success) {
+//                        dialog?.dismiss()
+//                        selectedImage = null
+//                    }
+//                }
             }
         }
+
+        applyClickAnimation(this, binding.btnSend) {
+            val messageTxt = binding.edtMessage.text.toString().trim()
+            val message = Messages(null, messageTxt, senderUid, null, Date().time)
+            if (messageTxt.isNotEmpty() || selectedImage != null) {
+                binding.edtMessage.setText("")
+                chatViewModel.onClickSendMsg(selectedImage, message, Date().time, senderRoom!!, receiveRoom!!, dialog!!)
+                binding.msgImg.visibility = View.GONE
+            } else {
+                Toast.makeText(this, "Please enter something", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
         applyClickAnimation(this, binding.attachment){
             imagePickCallback.launch("image/*")
         }
@@ -173,6 +198,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         database!!.reference.child("presence").child(currentId!!).setValue("Online")
+        userModerationManager.checkAndUnblockUser(currentId!!)
     }
 
     override fun onPause() {

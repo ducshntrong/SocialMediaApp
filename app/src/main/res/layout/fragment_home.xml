@@ -19,51 +19,110 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Home"
-                android:textColor="@color/black"
+                android:layout_marginStart="5dp"
+                android:text="@string/app_name"
+                android:textColor="@color/green"
                 android:textSize="@dimen/_24font_mdp"
                 android:textStyle="bold"
+                android:fontFamily="@font/roboto_medium"
                 app:layout_constraintBottom_toBottomOf="@id/view1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/circle"
-                android:backgroundTint="@color/orange"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-                app:layout_constraintEnd_toEndOf="@+id/profile_image"
-                app:layout_constraintStart_toStartOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="@id/profile_image" />
+            <ImageButton
+                android:id="@+id/add"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/add_circle_ic"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMsg"
+                app:layout_constraintEnd_toStartOf="@+id/btnMsg"
+                app:layout_constraintTop_toTopOf="@+id/btnMsg"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"/>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
+            <ImageButton
+                android:id="@+id/btnMsg"
                 android:layout_width="@dimen/_40mdp"
                 android:layout_height="@dimen/_40mdp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="3dp"
-                android:padding="2dp"
-                android:src="@drawable/avt"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/baseline_message_24"
                 app:layout_constraintBottom_toBottomOf="@id/view1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <View
                 android:id="@+id/view1"
                 android:layout_width="wrap_content"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMsg"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linear_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view1">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="@dimen/_40mdp"
+                    android:layout_height="@dimen/_40mdp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/avt"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/add_post"
+                    android:layout_width="@dimen/_200mdp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/background_violation"
+                    android:gravity="start"
+                    android:hint="Bạn đang nghĩ gì?"
+                    android:padding="10dp"
+                    android:textSize="@dimen/_12mdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                    app:layout_constraintStart_toEndOf="@+id/profile_image"
+                    app:layout_constraintTop_toTopOf="@+id/profile_image" />
+
+                <ImageButton
+                    android:id="@+id/pickImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/image"
+                    app:layout_constraintBottom_toBottomOf="@+id/add_post"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/add_post"
+                    app:layout_constraintTop_toTopOf="@+id/add_post" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="wrap_content"
+                android:layout_height="7dp"
+                android:background="#B5B1B1"
+                app:layout_constraintTop_toBottomOf="@+id/linear_add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <LinearLayout
                 android:id="@+id/horizontalScrollView"
@@ -73,7 +132,7 @@
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view1"
+                app:layout_constraintTop_toBottomOf="@+id/view4"
                 android:fillViewport="true">
 
                 <LinearLayout
@@ -85,7 +144,7 @@
                         android:id="@+id/addStoryImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp">
+                        android:layout_marginStart="10dp">
 
                         <com.makeramen.roundedimageview.RoundedImageView
                             android:id="@+id/storyImg"
@@ -96,8 +155,6 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:riv_border_color="@color/grey"
-                            app:riv_border_width="1dip"
                             app:riv_corner_radius="10dip"
                             app:riv_mutate_background="true" />
 
@@ -155,7 +212,7 @@
             <View
                 android:id="@+id/view2"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="3dp"
                 android:layout_marginTop="15dp"
                 android:background="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="parent"

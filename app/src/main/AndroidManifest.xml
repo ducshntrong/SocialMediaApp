@@ -4,19 +4,39 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SocialMediaApplication"
         tools:targetApi="31">
+        <activity
+            android:name=".Activity.NoteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AddNoteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AddPostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.UpdatePostActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.UpdateProfileActivity"
             android:exported="false" />
@@ -52,11 +72,13 @@
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".DeleteStoryJobService"
+            android:name=".Service.DeleteStoryJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name=".NotificationService"/>
-        <receiver android:name=".NotificationBr"
-            android:enabled="true"/>
+        <service android:name=".Service.NotificationService" />
+
+        <receiver
+            android:name=".NotificationBr"
+            android:enabled="true" />
 
         <meta-data
             android:name="preloaded_fonts"

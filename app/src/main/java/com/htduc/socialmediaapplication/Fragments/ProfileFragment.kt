@@ -8,17 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Activity.LoginActivity
 import com.htduc.socialmediaapplication.Activity.UpdateProfileActivity
@@ -26,11 +20,10 @@ import com.htduc.socialmediaapplication.Adapter.FollowAdapter
 import com.htduc.socialmediaapplication.Adapter.PostAdapter
 import com.htduc.socialmediaapplication.Model.Follow
 import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.FragmentProfileBinding
 import com.squareup.picasso.Picasso
@@ -66,8 +59,10 @@ class ProfileFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()
-        fragmentViewModel = ViewModelProviders.of(this,
-            FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(requireActivity().application, requireContext())
+        )[FragmentViewModel::class.java]
         profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
         return binding.root
     }

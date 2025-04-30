@@ -1,26 +1,23 @@
 package com.htduc.socialmediaapplication.Activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.htduc.socialmediaapplication.Fragments.AddPostFragment
 import com.htduc.socialmediaapplication.Fragments.HomeFragment
+import com.htduc.socialmediaapplication.Fragments.Notification2Fragment
 import com.htduc.socialmediaapplication.Fragments.NotificationFragment
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
 import com.htduc.socialmediaapplication.Fragments.SearchFragment
-import com.htduc.socialmediaapplication.Model.Notification
-import com.htduc.socialmediaapplication.NotificationBr
+import com.htduc.socialmediaapplication.Fragments.StoryFragment
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
+import com.htduc.socialmediaapplication.factory.ChatViewModelFactory
 import com.iammert.library.readablebottombar.ReadableBottomBar
 
 class MainActivity : AppCompatActivity() {
@@ -28,14 +25,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth:FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private var currentId: String? = null
+    private lateinit var userModerationManager: UserModerationManager
+
+    private lateinit var chatViewModel: ChatViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        chatViewModel = ViewModelProvider(this, ChatViewModelFactory(this))[ChatViewModel::class.java]
+        chatViewModel.deleteExpiredNotes()//goi ham de ktr va xoa note khi qua tgian 24h
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         currentId = auth.uid
+
+        userModerationManager = UserModerationManager(database, this)
 //        setSupportActionBar(binding.toolbar)
 //        supportActionBar?.title = "My Profile"
         replaceFragment(HomeFragment())
@@ -51,11 +55,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     1 -> {
                         //binding.toolbar.visibility = View.GONE
-                        replaceFragment(NotificationFragment())
+                        replaceFragment(Notification2Fragment())
                     }
                     2 -> {
                         //binding.toolbar.visibility = View.GONE
-                        replaceFragment(AddPostFragment())
+                        replaceFragment(StoryFragment())
                     }
                     3 -> {
                         //binding.toolbar.visibility = View.GONE
@@ -97,6 +101,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         database.reference.child("presence").child(currentId!!).setValue("Online")
+        userModerationManager.checkAndUnblockUser(currentId!!)
     }
 
     override fun onPause() {

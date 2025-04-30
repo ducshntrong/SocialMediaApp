@@ -171,6 +171,41 @@
                     tools:layout_editor_absoluteX="8dp" />
 
                 <LinearLayout
+                    android:id="@+id/alert"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:layout_above="@id/rvComment"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:visibility="gone"
+                    android:background="#F3F3F3">
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12mdp"
+                        android:layout_margin="5dp"
+                        android:textColor="#272727"
+                        android:text="Bạn đã bị hạn chế tính năng này vì vi phạm tiêu chuẩn cộng đồng của chúng tôi" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_tim_hieu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tìm hiểu thêm"
+                        android:background="@drawable/background_violation"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/linear02"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

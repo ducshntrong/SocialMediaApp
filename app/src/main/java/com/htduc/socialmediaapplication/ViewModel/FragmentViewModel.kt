@@ -1,5 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.job.JobInfo
@@ -8,31 +9,31 @@ import android.content.ComponentName
 import android.content.Context
 import android.net.Uri
 import android.os.PersistableBundle
-import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.DeleteStoryJobService
+import com.htduc.socialmediaapplication.Service.DeleteStoryJobService
 import com.htduc.socialmediaapplication.Model.Notification
 import com.htduc.socialmediaapplication.Model.Post
 import com.htduc.socialmediaapplication.Model.Story
 import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.UserStories
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
-class FragmentViewModel(application: Application): ViewModel() {
+class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {
     @SuppressLint("StaticFieldLeak")
-    private val context: Context = application.applicationContext
     private val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()
     private val storage = FirebaseStorage.getInstance()
+    private val nsfwDetector = NSFWDetector(context)
 
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
@@ -48,6 +49,7 @@ class FragmentViewModel(application: Application): ViewModel() {
 
     private val _listUser = MutableLiveData<ArrayList<User>>()
     val listUser : LiveData<ArrayList<User>> = _listUser
+    private val userModerationManager = UserModerationManager(database, context)
 
     init {
         showListStory()
@@ -94,6 +96,7 @@ class FragmentViewModel(application: Application): ViewModel() {
                             story.stories!!.reverse()
                             mListStory.add(story)
                         }
+                        mListStory.sortedByDescending { it.storyAt }
                         _listStory.value = mListStory
                     }
                 }
@@ -128,29 +131,42 @@ class FragmentViewModel(application: Application): ViewModel() {
     }
 
     fun uploadStory(selectedImgStory: Uri, onUploadComplete: (Boolean) -> Unit) {
-        val reference = storage.reference.child("stories")
-            .child(auth.uid!!).child(Date().time.toString())
-        reference.putFile(selectedImgStory).addOnSuccessListener { task->
-            task.metadata!!.reference!!.downloadUrl
-                .addOnSuccessListener { url->
-                    val imgUrl = url.toString()
-                    val story = Story()
-                    story.storyAt = Date().time
-                    val databaseStoryRef = database.reference
-                        .child("stories")
-                        .child(auth.uid!!)
-                    val stories = UserStories(imgUrl, story.storyAt)
-                    val storyId = databaseStoryRef.child("userStories").push().key
-                    databaseStoryRef.child("userStories")
-                        .child(storyId!!)
-                        .setValue(stories).addOnSuccessListener {
-                            //Lập lịch để xoá story sau 24h đăng
-                            scheduleDeleteStoryJob(storyId, auth.uid!!)
-                            onUploadComplete(true)
-                        }.addOnFailureListener {
-                            onUploadComplete(false)
-                        }
-                }
+        try {
+            val nsfwScore = nsfwDetector.detectNSFW(context, selectedImgStory)
+            if (nsfwScore > 0.70){
+                userModerationManager.showDialogViolation()
+                userModerationManager.handleViolation(auth.uid!!)
+                onUploadComplete(true)
+                return
+            }
+            val reference = storage.reference.child("stories")
+                .child(auth.uid!!).child(Date().time.toString())
+            reference.putFile(selectedImgStory).addOnSuccessListener { task->
+                task.metadata!!.reference!!.downloadUrl
+                    .addOnSuccessListener { url->
+                        val imgUrl = url.toString()
+                        val story = Story()
+                        story.storyAt = Date().time
+                        val databaseStoryRef = database.reference
+                            .child("stories")
+                            .child(auth.uid!!)
+                        val stories = UserStories(imgUrl, story.storyAt)
+                        val storyId = databaseStoryRef.child("userStories").push().key
+                        databaseStoryRef.child("userStories")
+                            .child(storyId!!)
+                            .setValue(stories).addOnSuccessListener {
+                                //Lập lịch để xoá story sau 24h đăng
+                                scheduleDeleteStoryJob(storyId, auth.uid!!)
+                                onUploadComplete(true)
+                            }.addOnFailureListener {
+                                onUploadComplete(false)
+                            }
+                    }
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(context, "Loi xu ly anh!", Toast.LENGTH_SHORT).show()
+            onUploadComplete(true)
         }
     }
     private fun scheduleDeleteStoryJob(storyId: String, userId: String) {
@@ -181,6 +197,7 @@ class FragmentViewModel(application: Application): ViewModel() {
                                 mListNotification.add(notification)
                             }
                         }
+                        mListNotification.sortByDescending { it.notificationAt }
                         _listNotification.value = mListNotification
                     }
                 }
@@ -219,39 +236,116 @@ class FragmentViewModel(application: Application): ViewModel() {
         val reference = storage.reference.child("posts").child(auth.uid!!)
             .child(Date().time.toString())
 
-        if (selectedImage != null) {
-            reference.putFile(selectedImage)
-                .addOnSuccessListener { task ->
-                    task.metadata?.reference?.downloadUrl
-                        ?.addOnSuccessListener { url ->
-                            val imageUrl = url.toString()
-                            val post = Post()
-                            post.postImage = imageUrl
-                            post.postedBy = auth.uid
-                            post.postDescription = postDescription
-                            post.postedAt = Date().time
+        try {
+            if (selectedImage != null) {
+                val nsfwScore = nsfwDetector.detectNSFW(context, selectedImage)
+                if (nsfwScore < 0.70){
+                    userModerationManager.showDialogViolation()
+                    userModerationManager.handleViolation(auth.uid!!)
+                    onUploadComplete(true)
+                    return
+                }
 
-                            database.reference.child("posts")
-                                .push()//push() được sd để tạo một khóa con duy nhất cho một nút trong csdl
-                                .setValue(post)
-                                .addOnSuccessListener {
-                                    onUploadComplete(true)
-                                }
-                        }
+                reference.putFile(selectedImage)
+                    .addOnSuccessListener { task ->
+                        task.metadata?.reference?.downloadUrl
+                            ?.addOnSuccessListener { url ->
+                                val imageUrl = url.toString()
+                                val post = Post()
+                                post.postImage = imageUrl
+                                post.postedBy = auth.uid
+                                post.postDescription = postDescription
+                                post.postedAt = Date().time
+
+                                database.reference.child("posts")
+                                    .push()//push() được sd để tạo một khóa con duy nhất cho một nút trong csdl
+                                    .setValue(post)
+                                    .addOnSuccessListener {
+                                        onUploadComplete(true)
+                                    }
+                            }
+                    }
+            } else {
+                val post = Post()
+                post.postImage = ""
+                post.postedBy = auth.uid
+                post.postDescription = postDescription
+                post.postedAt = Date().time
+
+                database.reference.child("posts")
+                    .push()
+                    .setValue(post)
+                    .addOnSuccessListener {
+                        onUploadComplete(true)
+                    }
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(context, "Loi xu ly anh!", Toast.LENGTH_SHORT).show()
+            onUploadComplete(true)
+        }
+    }
+
+    fun updatePost(postId: String, selectedImage: Uri?, postDescription: String, onUpdateComplete: (Boolean) -> Unit){
+        val postRef = database.reference.child("posts").child(postId)
+
+        try {
+            if (selectedImage != null){
+                // ktra NSFW
+                val nsfwScore = nsfwDetector.detectNSFW(context, selectedImage)
+                if (nsfwScore < 0.70){
+                    userModerationManager.showDialogViolation()
+                    userModerationManager.handleViolation(auth.uid!!)
+                    onUpdateComplete(false)
+                    return
+                }
+
+                // Upload anh moi
+                val reference = storage.reference.child("posts").child(auth.uid!!).child(Date().time.toString())
+                reference.putFile(selectedImage)
+                    .addOnSuccessListener { task ->
+                        task.metadata?.reference?.downloadUrl
+                            ?.addOnSuccessListener { url ->
+                                val imageUrl = url.toString()
+                                val updateMap = mapOf(
+                                    "postImage" to imageUrl,
+                                    "postDescription" to postDescription
+                                )
+
+                                postRef.updateChildren(updateMap)
+                                    .addOnSuccessListener {
+                                        onUpdateComplete(true)
+                                    }
+                            }
+                    }
+            } else {
+                //k co anh moi, chi update mo ta
+                postRef.child("postDescription").setValue(postDescription)
+                    .addOnSuccessListener {
+                        onUpdateComplete(true)
+                    }
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+            Toast.makeText(context, "Lỗi cập nhật bài viết!", Toast.LENGTH_SHORT).show()
+            onUpdateComplete(false)
+        }
+    }
+
+    fun deletePost(postId: String, postImageUrl: String?, onDeleteComplete: (Boolean) -> Unit){
+        val postRef = database.reference.child("posts").child(postId)
+        //neu co anh, xoa anh truoc
+        if (!postImageUrl.isNullOrEmpty()){
+            val photoRef = storage.getReferenceFromUrl(postImageUrl)
+            photoRef.delete()
+                .addOnSuccessListener {
+                    postRef.removeValue()
+                        .addOnSuccessListener { onDeleteComplete(true) }
                 }
         } else {
-            val post = Post()
-            post.postImage = ""
-            post.postedBy = auth.uid
-            post.postDescription = postDescription
-            post.postedAt = Date().time
-
-            database.reference.child("posts")
-                .push()
-                .setValue(post)
-                .addOnSuccessListener {
-                    onUploadComplete(true)
-                }
+            // k co anh, chi can xoa post
+            postRef.removeValue()
+                .addOnFailureListener{onDeleteComplete(true)}
         }
     }
 }

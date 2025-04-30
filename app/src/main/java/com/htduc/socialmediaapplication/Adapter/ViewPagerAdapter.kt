@@ -16,7 +16,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle):
     override fun createFragment(position: Int): Fragment {
         return when(position){
             0 -> Notification2Fragment()
-            else -> RequestFragment()
+            else -> Notification2Fragment()
         }
     }
 }

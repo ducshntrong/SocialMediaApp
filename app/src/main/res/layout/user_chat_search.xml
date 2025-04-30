@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:diagonal="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtNote"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_violation"
+        android:text="Dạo này sao rồi?"
+        android:gravity="center"
+        android:textColor="@color/derkGrey"
+        android:textSize="@dimen/_11mdp"
+        android:visibility="invisible"
+        diagonal:layout_constraintStart_toStartOf="parent"
+        diagonal:layout_constraintTop_toTopOf="parent" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="@dimen/_60mdp"
+        android:layout_height="@dimen/_60mdp"
+        android:src="@drawable/img"
+        diagonal:layout_constraintEnd_toEndOf="@+id/txtNote"
+        diagonal:layout_constraintStart_toStartOf="@+id/txtNote"
+        diagonal:layout_constraintTop_toBottomOf="@+id/txtNote" />
+
+
+    <ImageView
+        android:id="@+id/circle2"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/ic_circle"
+        android:visibility="invisible"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/txtNote"
+        diagonal:layout_constraintEnd_toEndOf="@+id/txtNote"
+        diagonal:layout_constraintHorizontal_bias="0.301"
+        diagonal:layout_constraintStart_toStartOf="@+id/txtNote"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="0.647"
+        diagonal:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:src="@drawable/ic_circle"
+        android:visibility="invisible"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/ic_circle"
+        android:visibility="invisible"
+        diagonal:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintHorizontal_bias="0.87"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"
+        diagonal:layout_constraintVertical_bias="0.96"
+        diagonal:tint="#10EC10" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="H.T.Duc"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_11font_mdp"
+        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"
+        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"
+        diagonal:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

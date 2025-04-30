@@ -9,25 +9,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.Model.User
 import com.htduc.socialmediaapplication.Model.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentAddPostBinding
 import com.squareup.picasso.Picasso
-import java.util.Date
 
 
 class AddPostFragment : Fragment() {
@@ -53,8 +44,10 @@ class AddPostFragment : Fragment() {
         dialog?.setCancelable(false)
         dialog?.setCanceledOnTouchOutside(false)
         auth = FirebaseAuth.getInstance()
-        fragmentViewModel = ViewModelProviders.of(this,
-            FragmentViewModelFactory(requireActivity().application))[FragmentViewModel::class.java]
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(requireActivity().application, requireContext())
+        )[FragmentViewModel::class.java]
         return binding.root
     }
 
@@ -117,7 +110,6 @@ class AddPostFragment : Fragment() {
             fragmentViewModel.uploadPost(selectedImage,binding.postDescription.text.toString()){isSuccess->
                 if (isSuccess){
                     dialog?.dismiss()
-                    Toast.makeText(requireContext(), "Posted Successfully", Toast.LENGTH_SHORT).show()
                     binding.postDescription.setText("")
                     binding.postImg.visibility = View.GONE
                 }

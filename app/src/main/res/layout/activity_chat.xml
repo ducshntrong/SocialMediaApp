@@ -108,19 +108,40 @@
             android:visibility="visible" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/txtIsSeen"
+    <LinearLayout
+        android:id="@+id/alert"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đã xem"
-        android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:layout_marginEnd="5dp"
-        android:textStyle="bold|normal"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        android:layout_above="@id/linear01"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/linear02"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:background="#F3F3F3">
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/_12mdp"
+            android:layout_margin="5dp"
+            android:textColor="#272727"
+            android:text="Bạn đã bị hạn chế tính năng này vì vi phạm tiêu chuẩn cộng đồng của chúng tôi" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_tim_hieu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tìm hiểu thêm"
+            android:background="@drawable/background_violation"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"/>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear02"
@@ -153,6 +174,31 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/edtMessage"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="5dp"-->
+<!--                        android:background="@android:color/transparent"-->
+<!--                        android:gravity="start"-->
+<!--                        android:hint="Ask a question..."-->
+<!--                        android:inputType="textMultiLine"-->
+<!--                        android:padding="5dp"-->
+<!--                        android:paddingStart="5dp"-->
+<!--                        android:paddingEnd="1dp"-->
+<!--                        android:textColorHint="#424242"-->
+<!--                        android:textSize="15sp" />-->
+
+<!--                </LinearLayout>-->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,13 +214,23 @@
                         android:layout_marginStart="5dp"
                         android:background="@android:color/transparent"
                         android:gravity="start"
-                        android:hint="Ask a question..."
+                        android:hint="Write a comment..."
                         android:inputType="textMultiLine"
+                        android:maxLines="2"
                         android:padding="5dp"
                         android:paddingStart="5dp"
                         android:paddingEnd="1dp"
                         android:textColorHint="#424242"
                         android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/msgImg"
+                        android:layout_width="200dp"
+                        android:layout_height="130dp"
+                        android:layout_margin="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/placeholder"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
