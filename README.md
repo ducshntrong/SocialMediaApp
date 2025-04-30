@@ -43,10 +43,13 @@ Download apk:
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
     <tr>
       <td><img src="screenshots/img12.jpg"/></td>
       <td><img src="screenshots/img13.jpg"/></td>
+      <td><img src="screenshots/img14.jpg"/></td>
+      <td><img src="screenshots/img16.jpg"/></td>
     </tr>
   <table/>
   
