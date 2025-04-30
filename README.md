@@ -4,51 +4,43 @@ Social app is an application that allows users to connect and interact with each
 Download apk: 
 <table style="width:100%">
   <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <tr>
     <td><img src="screenshots/img14.jpg"/></td>
     <td><img src="screenshots/img1.jpg"/></td>
     <td><img src="screenshots/img2.jpg"/></td>
     <td><img src="screenshots/img3.jpg"/></td>
   </tr>
-   <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-    <tr>
-      <td><img src="screenshots/img4.jpg"/></td>
-      <td><img src="screenshots/img5.jpg"/></td>
-      <td><img src="screenshots/img6.jpg"/></td>
-      <td><img src="screenshots/img7.jpg"/></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-    <tr>
-      <td><img src="screenshots/img8.jpg"/></td>
-      <td><img src="screenshots/img9.jpg"/></td>
-      <td><img src="screenshots/img10.jpg"/></td>
-      <td><img src="screenshots/img11.jpg"/></td>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-    <tr>
-      <td><img src="screenshots/img12.jpg"/></td>
-      <td><img src="screenshots/img13.jpg"/></td>
-    </tr>
-  <table/>
+  <tr>
+    <td><img src="screenshots/img4.jpg"/></td>
+    <td><img src="screenshots/img5.jpg"/></td>
+    <td><img src="screenshots/img6.jpg"/></td>
+    <td><img src="screenshots/img7.jpg"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img8.jpg"/></td>
+    <td><img src="screenshots/img9.jpg"/></td>
+    <td><img src="screenshots/img10.jpg"/></td>
+    <td><img src="screenshots/img11.jpg"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img12.jpg"/></td>
+    <td><img src="screenshots/img13.jpg"/></td>
+    <td><img src="screenshots/img14.jpg"/></td>
+    <td><img src="screenshots/img16.jpg"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img17.jpg"/></td>
+    <td><img src="screenshots/img18.jpg"/></td>
+    <td><img src="screenshots/img25.png"/></td>
+    <td><img src="screenshots/img20.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img21.png"/></td>
+    <td><img src="screenshots/img22.png"/></td>
+    <td><img src="screenshots/img23.png"/></td>
+    <td><img src="screenshots/img24.png"/></td>
+  </tr>
+</table>
+
   
 # Libraries
 - Dynamic size Library: https://github.com/MrNouri/DynamicSizes
