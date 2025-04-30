@@ -211,12 +211,10 @@ class ChatViewModel(private val context: Context) : ViewModel() {
 
         dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (userSnapshot in snapshot.children) { // Lặp qua từng user
-                    for (noteSnapshot in userSnapshot.children) { // Lặp qua từng note
-                        val note = noteSnapshot.getValue(Note::class.java)
-                        if (note?.timestamp != null && (note.timestamp + expiryTime < now)) {
-                            noteSnapshot.ref.removeValue() // Xóa note hết hạn
-                        }
+                for (userSnapshot in snapshot.children) { // Mỗi user chỉ có 1 note
+                    val note = userSnapshot.getValue(Note::class.java)
+                    if (note?.timestamp != null && (note.timestamp + expiryTime < now)) {
+                        userSnapshot.ref.removeValue() // Xóa note hết hạn
                     }
                 }
             }
