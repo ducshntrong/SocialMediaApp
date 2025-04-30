@@ -13,7 +13,7 @@ Download apk:
     <td><img src="screenshots/img4.jpg"/></td>
     <td><img src="screenshots/img5.jpg"/></td>
     <td><img src="screenshots/img6.jpg"/></td>
-    <td><img src="screenshots/img7.jpg"/></td>
+    <td><img src="screenshots/img6.jpg"/></td>
   </tr>
   <tr>
     <td><img src="screenshots/img8.jpg"/></td>
