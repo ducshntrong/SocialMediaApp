@@ -213,7 +213,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
                 for (userSnapshot in snapshot.children) { // Mỗi user chỉ có 1 note
                     val note = userSnapshot.getValue(Note::class.java)
                     if (note?.timestamp != null && (note.timestamp + expiryTime < now)) {
-                        userSnapshot.ref.removeValue() // Xóa note hết hạn
+                        userSnapshot.ref.removeValue() // Xóa note hết hạn.
                     }
                 }
             }
