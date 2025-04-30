@@ -74,5 +74,7 @@ Download apk:
 - Personal features
 - JobSchedukler
 - Active state
+- Note
+- AI nfws and sentiment analysis
   
 For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com 
