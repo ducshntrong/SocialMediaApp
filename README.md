@@ -31,13 +31,13 @@ Download apk:
     <td><img src="screenshots/img17.jpg"/></td>
     <td><img src="screenshots/img18.jpg"/></td>
     <td><img src="screenshots/img19.jpg"/></td>
-    <td><img src="screenshots/img20.jpg"/></td>
+    <td><img src="screenshots/img20.png"/></td>
   </tr>
   <tr>
-    <td><img src="screenshots/img21.jpg"/></td>
-    <td><img src="screenshots/img22.jpg"/></td>
-    <td><img src="screenshots/img23.jpg"/></td>
-    <td><img src="screenshots/img24.jpg"/></td>
+    <td><img src="screenshots/img21.png"/></td>
+    <td><img src="screenshots/img22.png"/></td>
+    <td><img src="screenshots/img23.png"/></td>
+    <td><img src="screenshots/img24.png"/></td>
   </tr>
 </table>
 
