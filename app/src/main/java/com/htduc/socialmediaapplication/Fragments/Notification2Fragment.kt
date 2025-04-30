@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.htduc.socialmediaapplication.Adapter.NotificationAdapter
-import com.htduc.socialmediaapplication.Model.Notification
+import com.htduc.socialmediaapplication.Adapters.NotificationAdapter
+import com.htduc.socialmediaapplication.Models.Notification
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentNotification2Binding
 
 

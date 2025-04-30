@@ -1,6 +1,5 @@
 package com.htduc.socialmediaapplication.Fragments
 
-import android.app.ActivityOptions
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -15,16 +14,16 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
-import com.htduc.socialmediaapplication.Activity.AddPostActivity
-import com.htduc.socialmediaapplication.Activity.MessageActivity
-import com.htduc.socialmediaapplication.Adapter.PostAdapter
-import com.htduc.socialmediaapplication.Adapter.StoryAdapter
-import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.Model.Story
-import com.htduc.socialmediaapplication.Model.applyClickAnimation
+import com.htduc.socialmediaapplication.Activities.AddPostActivity
+import com.htduc.socialmediaapplication.Activities.MessageActivity
+import com.htduc.socialmediaapplication.Adapters.PostAdapter
+import com.htduc.socialmediaapplication.Adapters.StoryAdapter
+import com.htduc.socialmediaapplication.Models.Post
+import com.htduc.socialmediaapplication.Models.Story
+import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentHomeBinding
 import com.squareup.picasso.Picasso
 

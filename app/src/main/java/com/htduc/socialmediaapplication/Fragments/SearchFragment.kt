@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.htduc.socialmediaapplication.Adapter.UserAdapter
+import com.htduc.socialmediaapplication.Adapters.UserAdapter
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentSearchBinding
 
 class SearchFragment : Fragment() {

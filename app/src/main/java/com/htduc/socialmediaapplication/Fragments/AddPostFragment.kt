@@ -13,10 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.htduc.socialmediaapplication.Model.applyClickAnimation
+import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentAddPostBinding
 import com.squareup.picasso.Picasso
 

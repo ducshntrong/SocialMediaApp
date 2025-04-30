@@ -11,14 +11,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.htduc.socialmediaapplication.Adapter.StoryAdapter
-import com.htduc.socialmediaapplication.Adapter.StoryAdapter2
-import com.htduc.socialmediaapplication.Model.Story
-import com.htduc.socialmediaapplication.Model.applyClickAnimation
-import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.Adapters.StoryAdapter2
+import com.htduc.socialmediaapplication.Models.Story
+import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
 import com.htduc.socialmediaapplication.databinding.FragmentStoryBinding
-import com.htduc.socialmediaapplication.factory.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
 
 class StoryFragment : Fragment() {
     private lateinit var binding: FragmentStoryBinding

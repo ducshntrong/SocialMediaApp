@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.moderation.NSFWDetector
+import com.htduc.socialmediaapplication.Moderation.NSFWDetector
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.job.JobInfo
@@ -20,12 +20,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Service.DeleteStoryJobService
-import com.htduc.socialmediaapplication.Model.Notification
-import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.Model.Story
-import com.htduc.socialmediaapplication.Model.User
-import com.htduc.socialmediaapplication.Model.UserStories
-import com.htduc.socialmediaapplication.moderation.UserModerationManager
+import com.htduc.socialmediaapplication.Models.Notification
+import com.htduc.socialmediaapplication.Models.Post
+import com.htduc.socialmediaapplication.Models.Story
+import com.htduc.socialmediaapplication.Models.User
+import com.htduc.socialmediaapplication.Models.UserStories
+import com.htduc.socialmediaapplication.Moderation.UserModerationManager
 import java.util.Date
 
 class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {

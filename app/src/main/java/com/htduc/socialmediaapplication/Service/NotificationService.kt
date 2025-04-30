@@ -12,8 +12,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.htduc.socialmediaapplication.Model.Notification
-import com.htduc.socialmediaapplication.Model.User
+import com.htduc.socialmediaapplication.Models.Notification
+import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.MyApplication
 import com.htduc.socialmediaapplication.R
 

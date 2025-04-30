@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.moderation.NSFWDetector
+import com.htduc.socialmediaapplication.Moderation.NSFWDetector
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -13,10 +13,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Model.Comment
-import com.htduc.socialmediaapplication.Model.Notification
-import com.htduc.socialmediaapplication.Model.Post
-import com.htduc.socialmediaapplication.moderation.UserModerationManager
+import com.htduc.socialmediaapplication.Models.Comment
+import com.htduc.socialmediaapplication.Models.Notification
+import com.htduc.socialmediaapplication.Models.Post
+import com.htduc.socialmediaapplication.Moderation.UserModerationManager
 import java.util.Date
 
 class CommentViewModel(private val context: Context): ViewModel() {

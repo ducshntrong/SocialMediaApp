@@ -1,7 +1,7 @@
 package com.htduc.socialmediaapplication.ViewModel
 
 import android.app.ProgressDialog
-import com.htduc.socialmediaapplication.moderation.NSFWDetector
+import com.htduc.socialmediaapplication.Moderation.NSFWDetector
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -14,12 +14,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Model.Chats
-import com.htduc.socialmediaapplication.Model.Messages
-import com.htduc.socialmediaapplication.Model.Note
-import com.htduc.socialmediaapplication.Model.User
-import com.htduc.socialmediaapplication.moderation.UserModerationManager
-import java.text.SimpleDateFormat
+import com.htduc.socialmediaapplication.Models.Chats
+import com.htduc.socialmediaapplication.Models.Messages
+import com.htduc.socialmediaapplication.Models.Note
+import com.htduc.socialmediaapplication.Models.User
+import com.htduc.socialmediaapplication.Moderation.UserModerationManager
 import java.util.*
 import kotlin.collections.ArrayList
 

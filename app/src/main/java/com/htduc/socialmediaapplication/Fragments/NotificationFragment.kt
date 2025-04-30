@@ -9,8 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Adapter.ViewPagerAdapter
-import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.Adapters.ViewPagerAdapter
 import com.htduc.socialmediaapplication.databinding.FragmentNotificationBinding
 
 class NotificationFragment : Fragment() {
