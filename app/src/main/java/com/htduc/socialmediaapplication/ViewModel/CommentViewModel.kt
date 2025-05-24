@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.Moderation.NSFWDetector
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -16,7 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Models.Comment
 import com.htduc.socialmediaapplication.Models.Notification
 import com.htduc.socialmediaapplication.Models.Post
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
 class CommentViewModel(private val context: Context): ViewModel() {
@@ -81,7 +81,7 @@ class CommentViewModel(private val context: Context): ViewModel() {
         try {
             if (selectedImgCmt != null){
                 val nsfwScore = nsfwDetector.detectNSFW(context, selectedImgCmt)
-                if (nsfwScore < 0.70){
+                if (nsfwScore > 0.70){
                     userModerationManager.showDialogViolation()
                     userModerationManager.handleViolation(auth.uid!!)
                     onSaveCmtComplete(true)

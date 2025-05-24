@@ -1,7 +1,7 @@
 package com.htduc.socialmediaapplication.ViewModel
 
 import android.app.ProgressDialog
-import com.htduc.socialmediaapplication.Moderation.NSFWDetector
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -18,7 +18,7 @@ import com.htduc.socialmediaapplication.Models.Chats
 import com.htduc.socialmediaapplication.Models.Messages
 import com.htduc.socialmediaapplication.Models.Note
 import com.htduc.socialmediaapplication.Models.User
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -109,7 +109,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
         try {
             dialog.show() // Hiển thị dialog khi bắt đầu tải ảnh
             val nsfwScore = nsfwDetector.detectNSFW(context, selectedImage)
-            if (nsfwScore < 0.70) {
+            if (nsfwScore > 0.70) {
                 moderationManager.showDialogViolation()
                 moderationManager.handleViolation(senderUid)
                 dialog.dismiss() // Ẩn dialog nếu phát hiện ảnh vi phạm
@@ -213,7 +213,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
                 for (userSnapshot in snapshot.children) { // Mỗi user chỉ có 1 note
                     val note = userSnapshot.getValue(Note::class.java)
                     if (note?.timestamp != null && (note.timestamp + expiryTime < now)) {
-                        userSnapshot.ref.removeValue() // Xóa note hết hạn.
+                        userSnapshot.ref.removeValue() // Xóa note hết hạn
                     }
                 }
             }

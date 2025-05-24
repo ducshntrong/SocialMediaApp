@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.Moderation.NSFWDetector
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.job.JobInfo
@@ -25,7 +25,7 @@ import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.Models.Story
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.UserStories
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
 class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {

@@ -25,7 +25,7 @@ import com.htduc.socialmediaapplication.Models.Messages
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityChatBinding
