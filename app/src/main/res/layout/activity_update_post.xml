@@ -8,18 +8,31 @@
     tools:context=".Activities.UpdatePostActivity">
 
     <!-- TODO: Update blank fragment layout -->
+    <ImageButton
+        android:id="@+id/img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/back_ic"
+        android:layout_margin="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView16" />
+
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif"
         android:text="Update Post"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:layout_marginStart="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnPost"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_back"
         app:layout_constraintTop_toTopOf="@+id/btnPost" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -52,7 +65,7 @@
         android:layout_marginTop="8dp"
         android:padding="2dp"
         android:src="@drawable/avt"
-        app:layout_constraintStart_toStartOf="@+id/textView16"
+        app:layout_constraintStart_toStartOf="@+id/img_back"
         app:layout_constraintTop_toBottomOf="@+id/view8" />
 
     <TextView

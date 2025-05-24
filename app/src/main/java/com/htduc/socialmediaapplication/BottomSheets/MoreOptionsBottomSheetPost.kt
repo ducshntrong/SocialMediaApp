@@ -60,6 +60,7 @@ class MoreOptionsBottomSheetPost(private val context: Context, private val post:
             dismiss()
         }
         binding.delete.setOnClickListener {
+            dismiss()
             AlertDialog.Builder(context)
                 .setTitle("Xoá bài viết")
                 .setMessage("Bạn có chắc chắn muốn xoá bài viết này?")
@@ -67,7 +68,6 @@ class MoreOptionsBottomSheetPost(private val context: Context, private val post:
                     fragmentViewModel.deletePost(post.postId!!, post.postImage){ isDeleted ->
                         if (isDeleted) {
                             Toast.makeText(requireContext(), "Xoá bài viết thành công!", Toast.LENGTH_SHORT).show()
-                            dismiss()
                         } else {
                             Toast.makeText(requireContext(), "Lỗi khi xoá bài viết!", Toast.LENGTH_SHORT).show()
                         }

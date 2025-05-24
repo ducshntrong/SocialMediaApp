@@ -2,6 +2,7 @@ package com.htduc.socialmediaapplication.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -13,9 +14,10 @@ import com.htduc.socialmediaapplication.Fragments.SearchFragment
 import com.htduc.socialmediaapplication.Fragments.StoryFragment
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
 import com.htduc.socialmediaapplication.ViewmodelFactories.ChatViewModelFactory
+import com.htduc.socialmediaapplication.moderation.TextClassifier
 import com.iammert.library.readablebottombar.ReadableBottomBar
 
 class MainActivity : AppCompatActivity() {
@@ -24,8 +26,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private var currentId: String? = null
     private lateinit var userModerationManager: UserModerationManager
-
     private lateinit var chatViewModel: ChatViewModel
+
+    private lateinit var textClassifier: TextClassifier
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -36,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         currentId = auth.uid
+
+        textClassifier = TextClassifier(this)
+        val safeText = textClassifier.cleanTextIfToxic("lũ khốn", "caption")
+        Toast.makeText(this, safeText, Toast.LENGTH_SHORT).show()
+        textClassifier.close()
 
         userModerationManager = UserModerationManager(database, this)
 //        setSupportActionBar(binding.toolbar)

@@ -97,6 +97,7 @@ class AddPostActivity : AppCompatActivity() {
                     binding.postDescription.setText("")
                     binding.postImg.visibility = View.GONE
                     enablePostButton(false)
+                    finish()
                 }
             }
         }

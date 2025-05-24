@@ -87,6 +87,8 @@ class UpdatePostActivity : AppCompatActivity() {
             }
         }
 
+        binding.imgBack.setOnClickListener { finish() }
+
         binding.postDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 

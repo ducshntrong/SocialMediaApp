@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.Moderation.NSFWDetector
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -16,7 +16,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.htduc.socialmediaapplication.Models.Comment
 import com.htduc.socialmediaapplication.Models.Notification
 import com.htduc.socialmediaapplication.Models.Post
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.TextClassifier
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
 class CommentViewModel(private val context: Context): ViewModel() {
@@ -24,6 +25,7 @@ class CommentViewModel(private val context: Context): ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val storage = FirebaseStorage.getInstance()
     private val nsfwDetector = NSFWDetector(context)
+    private val textClassifier = TextClassifier(context)
 
     private val _post = MutableLiveData<Post?>()
     val post: LiveData<Post?> = _post
@@ -78,10 +80,11 @@ class CommentViewModel(private val context: Context): ViewModel() {
 
     fun sendComment(selectedImgCmt: Uri?, edtMessage: String, postId: String, postedBy: String,
                             onSaveCmtComplete: (Boolean)->Unit) {
+        val cleanedComment = textClassifier.cleanTextIfToxic(edtMessage, "comment")
         try {
             if (selectedImgCmt != null){
                 val nsfwScore = nsfwDetector.detectNSFW(context, selectedImgCmt)
-                if (nsfwScore < 0.70){
+                if (nsfwScore > 0.70){
                     userModerationManager.showDialogViolation()
                     userModerationManager.handleViolation(auth.uid!!)
                     onSaveCmtComplete(true)
@@ -94,7 +97,7 @@ class CommentViewModel(private val context: Context): ViewModel() {
                         task.metadata!!.reference!!.downloadUrl
                             .addOnSuccessListener { url ->
                                 val imageUrl = url.toString()
-                                val comment = Comment(edtMessage, Date().time, auth.uid, imageUrl)
+                                val comment = Comment(cleanedComment, Date().time, auth.uid, imageUrl)
                                 database.reference
                                     .child("posts")
                                     .child(postId)
@@ -127,7 +130,7 @@ class CommentViewModel(private val context: Context): ViewModel() {
                             }
                     }
             }else{
-                val comment = Comment(edtMessage, Date().time, auth.uid, "")
+                val comment = Comment(cleanedComment, Date().time, auth.uid, "")
                 database.reference
                     .child("posts")
                     .child(postId)

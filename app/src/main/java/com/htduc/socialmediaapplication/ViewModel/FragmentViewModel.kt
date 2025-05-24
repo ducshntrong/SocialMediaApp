@@ -1,6 +1,6 @@
 package com.htduc.socialmediaapplication.ViewModel
 
-import com.htduc.socialmediaapplication.Moderation.NSFWDetector
+import com.htduc.socialmediaapplication.moderation.NSFWDetector
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.job.JobInfo
@@ -25,7 +25,8 @@ import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.Models.Story
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.UserStories
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.TextClassifier
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 
 class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {
@@ -34,6 +35,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
     private val auth = FirebaseAuth.getInstance()
     private val storage = FirebaseStorage.getInstance()
     private val nsfwDetector = NSFWDetector(context)
+    private val textClassifier = TextClassifier(context)
 
     private val _user = MutableLiveData<User?>()
     val user: LiveData<User?> = _user
@@ -237,6 +239,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
             .child(Date().time.toString())
 
         try {
+            val cleanedDescription = textClassifier.cleanTextIfToxic(postDescription, "caption")
             if (selectedImage != null) {
                 val nsfwScore = nsfwDetector.detectNSFW(context, selectedImage)
                 if (nsfwScore < 0.70){
@@ -254,7 +257,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
                                 val post = Post()
                                 post.postImage = imageUrl
                                 post.postedBy = auth.uid
-                                post.postDescription = postDescription
+                                post.postDescription = cleanedDescription
                                 post.postedAt = Date().time
 
                                 database.reference.child("posts")
@@ -269,7 +272,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
                 val post = Post()
                 post.postImage = ""
                 post.postedBy = auth.uid
-                post.postDescription = postDescription
+                post.postDescription = cleanedDescription
                 post.postedAt = Date().time
 
                 database.reference.child("posts")
@@ -288,7 +291,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
 
     fun updatePost(postId: String, selectedImage: Uri?, postDescription: String, onUpdateComplete: (Boolean) -> Unit){
         val postRef = database.reference.child("posts").child(postId)
-
+        val cleanedDescription = textClassifier.cleanTextIfToxic(postDescription, "caption")
         try {
             if (selectedImage != null){
                 // ktra NSFW
@@ -309,7 +312,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
                                 val imageUrl = url.toString()
                                 val updateMap = mapOf(
                                     "postImage" to imageUrl,
-                                    "postDescription" to postDescription
+                                    "postDescription" to cleanedDescription
                                 )
 
                                 postRef.updateChildren(updateMap)
@@ -320,7 +323,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
                     }
             } else {
                 //k co anh moi, chi update mo ta
-                postRef.child("postDescription").setValue(postDescription)
+                postRef.child("postDescription").setValue(cleanedDescription)
                     .addOnSuccessListener {
                         onUpdateComplete(true)
                     }

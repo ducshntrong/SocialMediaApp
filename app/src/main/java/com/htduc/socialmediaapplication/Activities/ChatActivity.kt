@@ -25,10 +25,11 @@ import com.htduc.socialmediaapplication.Models.Messages
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.Moderation.UserModerationManager
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityChatBinding
+import com.htduc.socialmediaapplication.moderation.TextClassifier
 import java.util.Date
 
 class ChatActivity : AppCompatActivity() {
@@ -49,6 +50,7 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var userModerationManager: UserModerationManager
+    private lateinit var textClassifier: TextClassifier
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -57,6 +59,8 @@ class ChatActivity : AppCompatActivity() {
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        textClassifier = TextClassifier(this)
 
         dialog = ProgressDialog(this)
         dialog?.setMessage("Uploading Image...")
@@ -119,8 +123,9 @@ class ChatActivity : AppCompatActivity() {
 
         applyClickAnimation(this, binding.btnSend) {
             val messageTxt = binding.edtMessage.text.toString().trim()
-            val message = Messages(null, messageTxt, senderUid, null, Date().time)
-            if (messageTxt.isNotEmpty() || selectedImage != null) {
+            val safeText = textClassifier.cleanTextIfToxic(messageTxt, "message")
+            val message = Messages(null, safeText, senderUid, null, Date().time)
+            if (safeText.isNotEmpty() || selectedImage != null) {
                 binding.edtMessage.setText("")
                 chatViewModel.onClickSendMsg(selectedImage, message, Date().time, senderRoom!!, receiveRoom!!, dialog!!)
                 binding.msgImg.visibility = View.GONE
@@ -204,5 +209,10 @@ class ChatActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         database!!.reference.child("presence").child(currentId!!).setValue("Offline")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        textClassifier.close()
     }
 }
