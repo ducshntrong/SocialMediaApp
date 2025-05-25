@@ -98,6 +98,8 @@ class AddPostActivity : AppCompatActivity() {
                     binding.postImg.visibility = View.GONE
                     enablePostButton(false)
                     finish()
+                }else{
+                    dialog?.dismiss()
                 }
             }
         }

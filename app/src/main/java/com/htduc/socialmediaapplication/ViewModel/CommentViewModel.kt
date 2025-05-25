@@ -84,10 +84,10 @@ class CommentViewModel(private val context: Context): ViewModel() {
         try {
             if (selectedImgCmt != null){
                 val nsfwScore = nsfwDetector.detectNSFW(context, selectedImgCmt)
-                if (nsfwScore > 0.70){
+                if (nsfwScore < 0.70){
                     userModerationManager.showDialogViolation()
                     userModerationManager.handleViolation(auth.uid!!)
-                    onSaveCmtComplete(true)
+                    onSaveCmtComplete(false)
                     return
                 }
                 val reference = storage.reference.child("comments")

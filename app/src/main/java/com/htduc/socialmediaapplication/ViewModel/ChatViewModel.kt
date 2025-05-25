@@ -111,7 +111,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
         try {
             dialog.show() // Hiển thị dialog khi bắt đầu tải ảnh
             val nsfwScore = nsfwDetector.detectNSFW(context, selectedImage)
-            if (nsfwScore > 0.70) {
+            if (nsfwScore < 0.70) {
                 moderationManager.showDialogViolation()
                 moderationManager.handleViolation(senderUid)
                 dialog.dismiss() // Ẩn dialog nếu phát hiện ảnh vi phạm
@@ -189,7 +189,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
     fun uploadNote(userId: String, content: String, onSaveNoteComplete: (Boolean) -> Unit) {
         val dbRef = database.reference.child("Notes").child(userId)
         val noteId = dbRef.push().key ?: return
-        val cleanedContent = textClassifier.cleanTextIfToxic(content, "note")
+        val cleanedContent = textClassifier.cleanTextIfToxic(content, "caption")
         val note = Note(noteId, userId, cleanedContent, System.currentTimeMillis())
 
         dbRef.child(noteId).setValue(note)
@@ -216,7 +216,7 @@ class ChatViewModel(private val context: Context) : ViewModel() {
                 for (userSnapshot in snapshot.children) { // Mỗi user chỉ có 1 note
                     val note = userSnapshot.getValue(Note::class.java)
                     if (note?.timestamp != null && (note.timestamp + expiryTime < now)) {
-                        userSnapshot.ref.removeValue() // Xóa note hết hạn
+                        userSnapshot.ref.removeValue() // Xóa note hết hạn.
                     }
                 }
             }

@@ -116,6 +116,8 @@ class CommentActivity : AppCompatActivity() {
                         dialog?.dismiss()
                         binding.cmtImg.visibility = View.GONE
                         binding.edtMessage.setText("")
+                    }else{
+                        dialog?.dismiss()
                     }
                 }
             }else{

@@ -14,10 +14,10 @@ import com.htduc.socialmediaapplication.Fragments.SearchFragment
 import com.htduc.socialmediaapplication.Fragments.StoryFragment
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
-import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
 import com.htduc.socialmediaapplication.ViewmodelFactories.ChatViewModelFactory
 import com.htduc.socialmediaapplication.moderation.TextClassifier
+import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.iammert.library.readablebottombar.ReadableBottomBar
 
 class MainActivity : AppCompatActivity() {
@@ -26,10 +26,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private var currentId: String? = null
     private lateinit var userModerationManager: UserModerationManager
-    private lateinit var chatViewModel: ChatViewModel
-
     private lateinit var textClassifier: TextClassifier
 
+    private lateinit var chatViewModel: ChatViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -42,9 +41,8 @@ class MainActivity : AppCompatActivity() {
         currentId = auth.uid
 
         textClassifier = TextClassifier(this)
-        val safeText = textClassifier.cleanTextIfToxic("lũ khốn", "caption")
-        Toast.makeText(this, safeText, Toast.LENGTH_SHORT).show()
-        textClassifier.close()
+        val t = textClassifier.cleanTextIfToxic("cc", "caption")
+        Toast.makeText(this, t, Toast.LENGTH_SHORT).show()
 
         userModerationManager = UserModerationManager(database, this)
 //        setSupportActionBar(binding.toolbar)

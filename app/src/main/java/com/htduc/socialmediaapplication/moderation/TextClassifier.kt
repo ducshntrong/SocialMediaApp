@@ -11,51 +11,50 @@ import java.nio.channels.FileChannel
 
 class TextClassifier(private val context: Context) {
 
+    // Đường dẫn đến các file mô hình và dữ liệu trong thư mục assets
     private val modelPath = "Text_CNN_model_v13.tflite"
     private val tokenizerPath = "tokenizer.json"
     private val stopwordsPath = "vietnamese-stopwords-dash.txt"
     private val offensiveWordsPath = "offensive-words.txt"
 
-    private val sequenceLength = 100
-    private val numClasses = 3
+    private val sequenceLength = 100 // Độ dài chuỗi token đầu vào
+    private val numClasses = 3 // Số nhãn: clean, offensive, hate
 
     private var interpreter: Interpreter
-    private var tokenizer: Map<String, Int> = emptyMap()
+    private var tokenizer: Map<String, Int> = emptyMap()  // Từ điển từ -> số
     private var stopwords: Set<String> = emptySet()
-    private var offensiveWords: Set<String> = emptySet()
+    private var offensiveWords: Set<String> = emptySet()// Danh sách từ tục
 
     init {
-        interpreter = Interpreter(loadModelFile())
-        tokenizer = loadTokenizer()
-        stopwords = loadStopwords()
-        offensiveWords = loadOffensiveWords()
+        interpreter = Interpreter(loadModelFile())// Load mô hình TFLite
+        tokenizer = loadTokenizer() // Load tokenizer từ JSON
+        stopwords = loadStopwords() // Load stopword
+        offensiveWords = loadOffensiveWords()// Load từ tục
     }
 
+    // Đọc file mô hình .tflite từ assets
     private fun loadModelFile(): MappedByteBuffer {
-        context.assets.openFd(modelPath).use { fileDescriptor ->
-            FileInputStream(fileDescriptor.fileDescriptor).use { inputStream ->
-                val fileChannel = inputStream.channel
-                return fileChannel.map(
-                    FileChannel.MapMode.READ_ONLY,
-                    fileDescriptor.startOffset,
-                    fileDescriptor.declaredLength
-                )
+        context.assets.openFd(modelPath).use { fd ->
+            FileInputStream(fd.fileDescriptor).use { inputStream ->
+                val channel = inputStream.channel
+                return channel.map(FileChannel.MapMode.READ_ONLY, fd.startOffset, fd.declaredLength)
             }
         }
     }
 
+    // Load tokenizer từ tokenizer.json
     private fun loadTokenizer(): Map<String, Int> {
         context.assets.open(tokenizerPath).bufferedReader().use { reader ->
-            val jsonStr = reader.readText()
-            val jsonObject = JSONObject(jsonStr)
+            val json = JSONObject(reader.readText())
             val map = mutableMapOf<String, Int>()
-            jsonObject.keys().forEach { key ->
-                map[key] = jsonObject.getInt(key)
+            json.keys().forEach { key ->
+                map[key] = json.getInt(key)
             }
             return map
         }
     }
 
+    // Load danh sách từ dừng từ file .txt
     private fun loadStopwords(): Set<String> {
         context.assets.open(stopwordsPath).bufferedReader().useLines { lines ->
             return lines.map { it.trim() }
@@ -64,6 +63,7 @@ class TextClassifier(private val context: Context) {
         }
     }
 
+    // Load danh sách từ tục (từ nhạy cảm) từ file .txt
     private fun loadOffensiveWords(): Set<String> {
         context.assets.open(offensiveWordsPath).bufferedReader().useLines { lines ->
             return lines.map { it.trim().lowercase() }
@@ -72,29 +72,33 @@ class TextClassifier(private val context: Context) {
         }
     }
 
+    // Tách từ: chuẩn hóa văn bản, lọc từ không trong stopword
     private fun tokenize(text: String): List<String> {
         val lowerText = text.lowercase()
-        val regex = "\\b[\\p{L}\\p{Nd}_]+\\b".toRegex()
+        val regex = "\\b[\\p{L}\\p{Nd}_]+\\b".toRegex() // chỉ lấy từ và số
         val tokens = regex.findAll(lowerText).map { it.value }.toList()
         return tokens.filter { it !in stopwords }
     }
 
+    // Tiền xử lý: chuyển từ thành số, padding cho đủ độ dài
     fun preprocess(text: String): IntArray {
-        val filteredTokens = tokenize(text)
-        val tokenIds = filteredTokens.map { tokenizer[it] ?: 0 }
+        val tokens = tokenize(text)
+        val ids = tokens.map { tokenizer[it] ?: 0 }
         val padded = IntArray(sequenceLength) { 0 }
-        tokenIds.take(sequenceLength).forEachIndexed { i, id -> padded[i] = id }
+        ids.take(sequenceLength).forEachIndexed { i, id -> padded[i] = id }
         return padded
     }
 
+    // Giống preprocess nhưng trả thêm danh sách từ đã lọc (debug)
     fun preprocessDebug(text: String): Pair<List<String>, IntArray> {
-        val filteredTokens = tokenize(text)
-        val tokenIds = filteredTokens.map { tokenizer[it] ?: 0 }
+        val tokens = tokenize(text)
+        val ids = tokens.map { tokenizer[it] ?: 0 }
         val padded = IntArray(sequenceLength) { 0 }
-        tokenIds.take(sequenceLength).forEachIndexed { i, id -> padded[i] = id }
-        return filteredTokens to padded
+        ids.take(sequenceLength).forEachIndexed { i, id -> padded[i] = id }
+        return tokens to padded
     }
 
+    // Dự đoán nhãn đầu ra: clean, offensive, hate kèm xác suất
     fun predict(text: String): Pair<String, Float> {
         val inputIds = preprocess(text)
         val inputBuffer = ByteBuffer.allocateDirect(4 * sequenceLength).order(ByteOrder.nativeOrder())
@@ -111,11 +115,13 @@ class TextClassifier(private val context: Context) {
         return labels[maxIdx] to probs[maxIdx]
     }
 
+    // Kiểm tra văn bản có chứa từ tục không (độc lập với model)
     private fun containsOffensiveWords(text: String): Boolean {
         val tokens = tokenize(text)
         return tokens.any { it in offensiveWords }
     }
 
+    // Dự đoán có fallback: nếu model trả "clean" nhưng có từ tục → trả "offensive"
     private fun predictWithFallback(text: String): Pair<String, Float> {
         val (label, confidence) = predict(text)
         if (label == "clean" && containsOffensiveWords(text)) {
@@ -124,41 +130,37 @@ class TextClassifier(private val context: Context) {
         return label to confidence
     }
 
+    // Lazy load các câu slogan thay thế từ slogans.json
     private val slogans: Map<String, List<String>> by lazy {
         loadSlogans()
     }
 
+    // Load slogan từ file slogans.json: key là loại nhãn → danh sách câu thay thế
     private fun loadSlogans(): Map<String, List<String>> {
-        val inputStream = context.assets.open("slogans.json")
-        val jsonStr = inputStream.bufferedReader().readText()
+        val jsonStr = context.assets.open("slogans.json").bufferedReader().readText()
         val jsonObject = JSONObject(jsonStr)
-
-        val slogansMap = mutableMapOf<String, List<String>>()
-        val keys = jsonObject.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            val array = jsonObject.getJSONArray(key)
-            val list = mutableListOf<String>()
-            for (i in 0 until array.length()) {
-                list.add(array.getString(i))
-            }
-            slogansMap[key] = list
+        val map = mutableMapOf<String, List<String>>()
+        jsonObject.keys().forEach { key ->
+            val arr = jsonObject.getJSONArray(key)
+            val list = List(arr.length()) { i -> arr.getString(i) }
+            map[key] = list
         }
-        return slogansMap
+        return map
     }
 
+    // Nếu là comment xấu thì thay bằng câu slogan phù hợp
     fun cleanTextIfToxic(text: String, type: String): String {
         val (label, _) = predictWithFallback(text)
         if (label != "clean") {
-            val safeList = slogans[type] ?: listOf("Hãy lan tỏa điều tích cực!")
-            return safeList.random()
+            val list = slogans[type] ?: listOf("Hãy lan tỏa điều tích cực!")
+            return list.random()
         }
         return text
     }
 
+    // Đóng model khi không dùng nữa
     fun close() {
         interpreter.close()
     }
 }
-
 
