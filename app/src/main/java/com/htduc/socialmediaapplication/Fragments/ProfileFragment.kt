@@ -45,7 +45,6 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentProfileBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -53,6 +52,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentProfileBinding.inflate(layoutInflater)
         dialog = ProgressDialog(requireContext())
         dialog?.setMessage("Updating Image...")
         dialog?.setCancelable(false)

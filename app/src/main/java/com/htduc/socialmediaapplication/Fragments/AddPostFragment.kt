@@ -30,7 +30,6 @@ class AddPostFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentAddPostBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -38,6 +37,7 @@ class AddPostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentAddPostBinding.inflate(layoutInflater)
         dialog = ProgressDialog(requireContext(), ProgressDialog.STYLE_SPINNER)
         dialog?.setTitle("Post Uploading")
         dialog?.setMessage("Please Wait...")

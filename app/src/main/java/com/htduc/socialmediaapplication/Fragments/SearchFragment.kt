@@ -18,7 +18,6 @@ class SearchFragment : Fragment() {
     private lateinit var fragmentViewModel: FragmentViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentSearchBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -26,6 +25,8 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+        binding = FragmentSearchBinding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             this,
             FragmentViewModelFactory(requireActivity().application, requireContext())
@@ -42,6 +43,7 @@ class SearchFragment : Fragment() {
         fragmentViewModel.listUser.observe(viewLifecycleOwner){
             userAdapter.setUserList(it)
         }
+
     }
 
 }

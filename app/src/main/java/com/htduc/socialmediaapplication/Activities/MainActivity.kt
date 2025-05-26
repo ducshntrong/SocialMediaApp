@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.htduc.socialmediaapplication.Fragments.HomeFragment
+import com.htduc.socialmediaapplication.Fragments.MainSearchFragment
 import com.htduc.socialmediaapplication.Fragments.Notification2Fragment
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
 import com.htduc.socialmediaapplication.Fragments.SearchFragment
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         currentId = auth.uid
 
         textClassifier = TextClassifier(this)
-        val t = textClassifier.cleanTextIfToxic("cc", "caption")
+        val t = textClassifier.cleanTextIfToxic("thằng lol rô đĩ ăn cứt chó", "caption")
         Toast.makeText(this, t, Toast.LENGTH_SHORT).show()
 
         userModerationManager = UserModerationManager(database, this)
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     3 -> {
                         //binding.toolbar.visibility = View.GONE
-                        replaceFragment(SearchFragment())
+                        replaceFragment(MainSearchFragment())
                     }
                     4 -> {
                         //binding.toolbar.visibility = View.VISIBLE

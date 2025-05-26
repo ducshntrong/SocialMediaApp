@@ -1,17 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Fragments.SearchFragment">
 
+
+<!--    <TextView-->
+<!--        android:id="@+id/textView23"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Tìm kiếm"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/_19mdp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_margin="10dp"/>-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:gravity="center_vertical">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/btnBack"-->
+<!--            android:layout_width="32dp"-->
+<!--            android:layout_height="32dp"-->
+<!--            android:padding="6dp"-->
+<!--            android:src="@drawable/back_ic"-->
+<!--            android:contentDescription="Back"-->
+<!--            android:visibility="gone"-->
+<!--            android:background="?selectableItemBackgroundBorderless" />-->
+
+<!--        <androidx.appcompat.widget.SearchView-->
+<!--            android:id="@+id/searchUser"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="45dp"-->
+<!--            app:searchIcon="@drawable/ic_search2"-->
+<!--            app:iconifiedByDefault="false"-->
+<!--            app:queryHint="Tìm kiếm ..."-->
+<!--            android:background="@drawable/custom_search_view"-->
+<!--            app:queryBackground="@android:color/transparent"-->
+<!--            app:searchHintIcon="@null"/>-->
+<!--    </LinearLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userRv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent" />
+</LinearLayout>

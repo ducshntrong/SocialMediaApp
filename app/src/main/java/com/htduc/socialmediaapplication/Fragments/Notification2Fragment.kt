@@ -22,7 +22,6 @@ class Notification2Fragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentNotification2Binding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -30,6 +29,7 @@ class Notification2Fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentNotification2Binding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             this,
             FragmentViewModelFactory(requireActivity().application, requireContext())

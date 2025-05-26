@@ -40,6 +40,7 @@ class UserAdapter(val context: Context)
         val profession = binding.profession
         val btnFollow = binding.btnFollow
         val status = binding.imgStatus
+        val countFollow = binding.countFollow
         val root = binding.root
     }
 
@@ -56,6 +57,7 @@ class UserAdapter(val context: Context)
         val user = listUser[position]
         holder.username.text = user.name
         holder.profession.text = user.profession
+        holder.countFollow.text = "${user.followerCount} người theo dõi"
         Picasso.get()
             .load(user.profilePhoto)
             .placeholder(R.drawable.avt)
@@ -174,11 +176,11 @@ class UserAdapter(val context: Context)
     private fun updateFollowButton(button: Button, isFollowing: Boolean) {
         if (isFollowing) {
             button.background = ContextCompat.getDrawable(context, R.drawable.follow_action_btn)
-            button.text = "Unfollow"
+            button.text = "Bỏ theo dõi"
             button.setTextColor(ContextCompat.getColor(context, R.color.derkGrey))
         } else {
             button.background = ContextCompat.getDrawable(context, R.drawable.follow_btn_bg)
-            button.text = "Follow"
+            button.text = "Theo dõi"
             button.setTextColor(ContextCompat.getColor(context, R.color.white))
         }
     }

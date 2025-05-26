@@ -20,8 +20,6 @@ class NotificationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentNotificationBinding.inflate(layoutInflater)
-
     }
 
     override fun onCreateView(
@@ -29,6 +27,7 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentNotificationBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         storage = FirebaseStorage.getInstance()

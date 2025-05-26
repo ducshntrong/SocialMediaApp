@@ -29,7 +29,6 @@ class StoryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentStoryBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -37,6 +36,7 @@ class StoryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentStoryBinding.inflate(layoutInflater)
         dialog = ProgressDialog(requireContext(), ProgressDialog.STYLE_SPINNER)
         dialog?.setTitle("Story Uploading")
         dialog?.setMessage("Please Wait...")

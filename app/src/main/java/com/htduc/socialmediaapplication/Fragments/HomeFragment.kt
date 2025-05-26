@@ -41,7 +41,6 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentHomeBinding.inflate(layoutInflater)
     }
 
     override fun onCreateView(
@@ -49,6 +48,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        binding = FragmentHomeBinding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             this,
             FragmentViewModelFactory(requireActivity().application, requireContext())
