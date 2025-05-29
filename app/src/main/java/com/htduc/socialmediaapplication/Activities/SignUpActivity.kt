@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.databinding.ActivitySignUpBinding
 
@@ -32,10 +35,10 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUp() {
-        val email = binding.emailEdt.text.toString()
-        val password = binding.passEdt.text.toString()
-        val name = binding.nameEdt.text.toString()
-        val profession = binding.professionEdt.text.toString()
+        val email = binding.emailEdt.text.toString().trim()
+        val password = binding.passEdt.text.toString().trim()
+        val name = binding.nameEdt.text.toString().trim()
+        val profession = binding.professionEdt.text.toString().trim()
 
         if (email.isEmpty()){
             binding.emailEdt.error = "Please type your email"
@@ -47,31 +50,53 @@ class SignUpActivity : AppCompatActivity() {
             binding.nameEdt.error = "Please type your name"
             return
         }else if (profession.isEmpty()){
-            binding.professionEdt.error = "Please type your profession"
+            binding.professionEdt.error = "Please type your username"
             return
+        }else if (name.length > 20){
+            binding.nameEdt.error = "Name must be less than 30 characters"
+        }else if (profession.length > 20){
+            binding.nameEdt.error = "Username must be less than 20 characters"
         }
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful){
-                    val id = it.result.user!!.uid
-                    val user = User()
-                    user.uid = id
-                    user.name = name
-                    user.profession = profession
-                    user.email = email
-                    user.password = password
-                    database.reference.child("Users").child(id).setValue(user)
-                    Toast.makeText(this, "Sign Up Success", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, LoginActivity::class.java)
-                    val bundle = Bundle()
-                    bundle.putString("email", email)
-                    bundle.putString("password", password)
-                    intent.putExtras(bundle)
-                    startActivity(intent)
-                    finish()
-                }else{
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
+
+        // Kiểm tra profession có bị trùng không
+        val usersRef = database.reference.child("Users")
+        usersRef.orderByChild("profession").equalTo(profession)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        binding.professionEdt.error = "This username is already taken"
+                    } else {
+                        // username là duy nhất => Tiến hành đăng ký
+                        auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val id = task.result.user!!.uid
+                                    val user = User().apply {
+                                        uid = id
+                                        this.name = name
+                                        this.profession = profession
+                                        this.email = email
+                                        this.password = password
+                                    }
+                                    usersRef.child(id).setValue(user)
+                                    Toast.makeText(this@SignUpActivity, "Sign Up Success", Toast.LENGTH_SHORT).show()
+
+                                    val intent = Intent(this@SignUpActivity, LoginActivity::class.java).apply {
+                                        putExtra("email", email)
+                                        putExtra("password", password)
+                                    }
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    Toast.makeText(this@SignUpActivity, "Sign Up Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                    }
                 }
-            }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(this@SignUpActivity, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 }

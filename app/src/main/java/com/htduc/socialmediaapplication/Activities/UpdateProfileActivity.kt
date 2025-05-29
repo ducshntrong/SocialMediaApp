@@ -1,14 +1,20 @@
 package com.htduc.socialmediaapplication.Activities
 
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
@@ -95,14 +101,30 @@ class UpdateProfileActivity : AppCompatActivity() {
             val birthday = binding.birthdayEdt.text.toString()
             val gender = binding.genderSpinner.selectedItem.toString()
 
-            dialog?.show()
-            profileViewModel.saveProfile(name, profession, phone, birthday, gender,
-                profilePhoto, coverPhoto){
-                if (it){
-                    dialog?.dismiss()
-                    finish()
-                }
-            }
+
+            // Kiểm tra profession có bị trùng không
+            val usersRef = database.reference.child("Users")
+            usersRef.orderByChild("profession").equalTo(profession)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            binding.profession.error = "This username is already taken"
+                        } else {
+                            dialog?.show()
+                            profileViewModel.saveProfile(name, profession, phone, birthday, gender,
+                                profilePhoto, coverPhoto){
+                                if (it){
+                                    dialog?.dismiss()
+                                    finish()
+                                }
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@UpdateProfileActivity, "Database error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
     }
 

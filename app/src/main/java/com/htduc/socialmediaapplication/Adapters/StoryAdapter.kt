@@ -32,6 +32,11 @@ class StoryAdapter(private val context: Context, private var listStory: ArrayLis
         this.listStory = listStory
         notifyDataSetChanged()
     }
+
+    fun getStoryList(): ArrayList<Story> {
+        return listStory
+    }
+
     inner class StoryViewHolder(binding: StoryRvDesignBinding): RecyclerView.ViewHolder(binding.root) {
         val profile = binding.profileImage
         val storyImg = binding.storyImg

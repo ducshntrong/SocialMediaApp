@@ -1,0 +1,136 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:src="@drawable/img"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imgStatus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image"
+        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintStart_toStartOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        app:layout_constraintVertical_bias="1.0"
+        app:tint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/btnAddFollow"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/baseline_add_24"
+        app:layout_constraintTop_toTopOf="@+id/imgStatus"
+        app:layout_constraintBottom_toBottomOf="@+id/imgStatus"
+        app:layout_constraintStart_toStartOf="@+id/imgStatus"
+        app:layout_constraintEnd_toEndOf="@+id/imgStatus" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="H.T.DUC"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:id="@+id/profession"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kenHuynh_trong"
+        android:textSize="12sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"
+        android:ellipsize="end"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:diagonal="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:paddingTop="10dp">-->
+
+
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        android:id="@+id/profile_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/_80mdp"-->
+<!--        android:src="@drawable/img"-->
+<!--        diagonal:layout_constraintStart_toStartOf="parent"-->
+<!--        diagonal:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <ImageView-->
+<!--        android:id="@+id/imgStatus"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:src="@drawable/ic_circle"-->
+<!--        diagonal:layout_constraintBottom_toBottomOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintEnd_toEndOf="parent"-->
+<!--        diagonal:layout_constraintHorizontal_bias="0.87"-->
+<!--        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintTop_toTopOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintVertical_bias="0.9"-->
+<!--        diagonal:tint="@color/black" />-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/btnAddFollow"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--        android:clickable="true"-->
+<!--        android:focusable="true"-->
+<!--        android:src="@drawable/baseline_add_24"-->
+<!--        diagonal:layout_constraintBottom_toBottomOf="@+id/imgStatus"-->
+<!--        diagonal:layout_constraintEnd_toEndOf="@+id/imgStatus"-->
+<!--        diagonal:layout_constraintStart_toStartOf="@+id/imgStatus"-->
+<!--        diagonal:layout_constraintTop_toTopOf="@+id/imgStatus" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/username"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="H.T.DUC"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/_10font_mdp"-->
+<!--        android:textStyle="bold"-->
+<!--        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintTop_toBottomOf="@+id/profile_image" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/profession"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="kenHuynh_trong"-->
+<!--        diagonal:layout_constraintEnd_toEndOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintStart_toStartOf="@+id/profile_image"-->
+<!--        diagonal:layout_constraintTop_toBottomOf="@+id/username" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

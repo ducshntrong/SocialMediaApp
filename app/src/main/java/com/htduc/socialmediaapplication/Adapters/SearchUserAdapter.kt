@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -20,12 +21,13 @@ import com.htduc.socialmediaapplication.Models.Follow
 import com.htduc.socialmediaapplication.Models.Notification
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.R
+import com.htduc.socialmediaapplication.databinding.ItemSearchUserBinding
 import com.htduc.socialmediaapplication.databinding.UserRvBinding
 import com.squareup.picasso.Picasso
 import java.util.Date
 
-class UserAdapter(val context: Context)
-    :RecyclerView.Adapter<UserAdapter.UserHolder>(){
+class SearchUserAdapter(val context: Context)
+    :RecyclerView.Adapter<SearchUserAdapter.UserHolder>(){
     private var isFollowing:Boolean = false
     private var listUser: ArrayList<User> = arrayListOf()
 
@@ -34,18 +36,17 @@ class UserAdapter(val context: Context)
         this.listUser = listUser
         notifyDataSetChanged()
     }
-    inner class UserHolder(binding: UserRvBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class UserHolder(binding: ItemSearchUserBinding): RecyclerView.ViewHolder(binding.root) {
         val imgProfile = binding.profileImage
         val username = binding.username
         val profession = binding.profession
-        val btnFollow = binding.btnFollow
+        val btnFollow = binding.btnAddFollow
         val status = binding.imgStatus
-        val countFollow = binding.countFollow
         val root = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
-        return UserHolder(UserRvBinding.inflate(LayoutInflater.from(parent.context), parent ,false))
+        return UserHolder(ItemSearchUserBinding.inflate(LayoutInflater.from(parent.context), parent ,false))
     }
 
     override fun getItemCount(): Int {
@@ -57,32 +58,10 @@ class UserAdapter(val context: Context)
         val user = listUser[position]
         holder.username.text = user.name
         holder.profession.text = user.profession
-        holder.countFollow.text = "${user.followerCount} người theo dõi"
         Picasso.get()
             .load(user.profilePhoto)
             .placeholder(R.drawable.avt)
             .into(holder.imgProfile)
-
-        //cập nhật trình trạng off và on
-        FirebaseDatabase.getInstance().reference.child("presence").child(user.uid!!)
-            .addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()){
-                        val status = snapshot.getValue(String::class.java)
-                        if (status != null){
-                            if (status == "Offline"){
-                                holder.status.visibility = View.INVISIBLE
-                            }else{
-                                holder.status.visibility = View.VISIBLE
-                            }
-                        }
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
 
         val currentUserUid = FirebaseAuth.getInstance().uid ?: return
 
@@ -111,14 +90,11 @@ class UserAdapter(val context: Context)
                 // FOLLOW
                 val follow = Follow(currentUserUid, Date().time)
                 followRef.setValue(follow).addOnSuccessListener {
-                    user.followerCount += 1
-                    holder.countFollow.text = "${user.followerCount} người theo dõi"
-
                     FirebaseDatabase.getInstance().reference
                         .child("Users")
                         .child(user.uid!!)
                         .child("followerCount")
-                        .setValue(user.followerCount)
+                        .setValue(user.followerCount + 1)
 
                     // Thêm thông báo Follow
                     val notification = Notification()
@@ -136,14 +112,11 @@ class UserAdapter(val context: Context)
             } else {
                 // UNFOLLOW
                 followRef.setValue(null).addOnSuccessListener {
-                    user.followerCount = (user.followerCount - 1).coerceAtLeast(0)
-                    holder.countFollow.text = "${user.followerCount} người theo dõi"
-
                     FirebaseDatabase.getInstance().reference
                         .child("Users")
                         .child(user.uid!!)
                         .child("followerCount")
-                        .setValue((user.followerCount))
+                        .setValue((user.followerCount - 1).coerceAtLeast(0))
 
                     // Xóa thông báo Follow khi Unfollow
                     FirebaseDatabase.getInstance().reference
@@ -179,15 +152,11 @@ class UserAdapter(val context: Context)
     }
 
     // Hàm cập nhật UI của nút Follow
-    private fun updateFollowButton(button: Button, isFollowing: Boolean) {
+    private fun updateFollowButton(button: ImageButton, isFollowing: Boolean) {
         if (isFollowing) {
-            button.background = ContextCompat.getDrawable(context, R.drawable.follow_action_btn)
-            button.text = "Bỏ theo dõi"
-            button.setTextColor(ContextCompat.getColor(context, R.color.derkGrey))
+            button.setImageResource(R.drawable.check_ic)
         } else {
-            button.background = ContextCompat.getDrawable(context, R.drawable.follow_btn_bg)
-            button.text = "Theo dõi"
-            button.setTextColor(ContextCompat.getColor(context, R.color.white))
+            button.setImageResource(R.drawable.baseline_add_24)
         }
     }
 

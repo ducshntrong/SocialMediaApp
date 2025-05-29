@@ -28,6 +28,7 @@ import com.htduc.socialmediaapplication.Models.UserStories
 import com.htduc.socialmediaapplication.moderation.TextClassifier
 import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
+import android.util.Log
 
 class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {
     @SuppressLint("StaticFieldLeak")
@@ -53,11 +54,17 @@ class FragmentViewModel(application: Application,private val context: Context): 
     val listUser : LiveData<ArrayList<User>> = _listUser
     private val userModerationManager = UserModerationManager(database, context)
 
-    init {
-        showListStory()
-        showListPost()
-        fetchListNotification()
-        showListUser()
+    private val _searchResultListUser = MutableLiveData<ArrayList<User>>()
+    val searchResultListUser : LiveData<ArrayList<User>> = _searchResultListUser
+
+    private val _searchResultListPost = MutableLiveData<ArrayList<Post>>()
+    val searchResultListPost : LiveData<ArrayList<Post>> = _searchResultListPost
+
+    init { //isNullOrEmpty() giúp tránh gọi lại hàm nếu ds đã được load từ trước.
+        if (_listStory.value.isNullOrEmpty()) showListStory()
+        if (_listPost.value.isNullOrEmpty()) showListPost()
+        if (_listNotification.value.isNullOrEmpty()) fetchListNotification()
+        if (_listUser.value.isNullOrEmpty()) showListUser()
     }
 
     fun setProfileUser(id: String){
@@ -67,6 +74,85 @@ class FragmentViewModel(application: Application,private val context: Context): 
                     if (snapshot.exists()){
                         val user = snapshot.getValue(User::class.java)
                         _user.value = user
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+    }
+
+    private fun showListUser() {
+        database.reference.child("Users")
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val mListUser = arrayListOf<User>()
+                    mListUser.clear()
+                    if (snapshot.exists()){
+                        for (snapshot1 in snapshot.children){
+                            val user = snapshot1.getValue(User::class.java)
+                            if (!(user!!.uid).equals(auth.uid))
+                                mListUser.add(user)
+                        }
+                        _listUser.value = mListUser
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+    }
+
+    fun searchUser(query: String){
+        val lowercaseQuery = query.trim().lowercase()
+
+        database.reference.child("Users")
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val searchResults = arrayListOf<User>()
+                    if (snapshot.exists()){
+                        for (snapshot1 in snapshot.children){
+                            val user = snapshot1.getValue(User::class.java)
+                            if (user != null && user.uid != auth.uid){
+                                val name = user.name?.lowercase() ?: ""
+                                val profession  = user.profession?.lowercase() ?: ""
+
+                                if (name.contains(lowercaseQuery) || profession.contains(lowercaseQuery)){
+                                    searchResults.add(user)
+                                }
+                            }
+                        }
+                        _searchResultListUser.value = searchResults
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("searchUser", "Database error: ${error.message}")
+                }
+
+            })
+
+        database.reference.child("posts")
+            .addValueEventListener(object : ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val postSearchResults = arrayListOf<Post>()
+                    if (snapshot.exists()){
+                        for (dataSnap in snapshot.children){
+                            val post = dataSnap.getValue(Post::class.java)
+                            if (post != null && post.postedBy != auth.uid){
+                                val postDescription = post.postDescription?.lowercase() ?: ""
+                                if (postDescription.contains(lowercaseQuery)){
+                                    post.postId = dataSnap.key //laays id cuar post
+                                    postSearchResults.add(post)
+                                }
+                            }
+                        }
+                        postSearchResults.sortByDescending { it.postedAt }
+                        _searchResultListPost.value = postSearchResults
                     }
                 }
 
@@ -121,6 +207,7 @@ class FragmentViewModel(application: Application,private val context: Context): 
                             post!!.postId = dataSnap.key //laays id cuar post
                             mListPost.add(post)
                         }
+                        mListPost.sortByDescending { it.postedAt }
                         _listPost.value = mListPost
                     }
                 }
@@ -201,29 +288,6 @@ class FragmentViewModel(application: Application,private val context: Context): 
                         }
                         mListNotification.sortByDescending { it.notificationAt }
                         _listNotification.value = mListNotification
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
-    }
-
-    private fun showListUser() {
-        database.reference.child("Users")
-            .addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val mListUser = arrayListOf<User>()
-                    mListUser.clear()
-                    if (snapshot.exists()){
-                        for (snapshot1 in snapshot.children){
-                            val user = snapshot1.getValue(User::class.java)
-                            if (!(user!!.uid).equals(auth.uid))
-                                mListUser.add(user)
-                        }
-                        _listUser.value = mListUser
                     }
                 }
 

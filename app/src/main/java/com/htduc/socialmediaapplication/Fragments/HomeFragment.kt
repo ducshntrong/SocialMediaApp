@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
-            this,
+            requireActivity(),
             FragmentViewModelFactory(requireActivity().application, requireContext())
         )[FragmentViewModel::class.java]
 
@@ -87,17 +87,21 @@ class HomeFragment : Fragment() {
         binding.storyRv.isNestedScrollingEnabled = false
         binding.storyRv.adapter = storyAdapter
         fragmentViewModel.listStory.observe(viewLifecycleOwner){ story->
-            storyAdapter.setStoryList(story)
+            if (storyAdapter.getStoryList() != story) {
+                storyAdapter.setStoryList(story)
+            }
         }
 
         binding.postRv.showShimmerAdapter()
         postAdapter = PostAdapter(requireContext(), listPost)
-        binding.postRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        binding.postRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.postRv.isNestedScrollingEnabled = false
         binding.postRv.adapter = postAdapter
         fragmentViewModel.listPost.observe(viewLifecycleOwner){ post->
-            binding.postRv.hideShimmerAdapter()
-            postAdapter.setPostList(post)
+            if (postAdapter.getPostList() != post) {
+                binding.postRv.hideShimmerAdapter()
+                postAdapter.setPostList(post)
+            }
         }
 
         galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri->

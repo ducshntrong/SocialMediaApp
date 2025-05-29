@@ -69,7 +69,7 @@
         <activity
             android:name=".Activities.MainActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:windowSoftInputMode="adjustNothing"/>
 
         <service
             android:name=".Service.DeleteStoryJobService"

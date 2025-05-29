@@ -46,14 +46,17 @@ class MainSearchFragment : Fragment() {
         binding.searchUser.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
-                    Toast.makeText(requireContext(), "Bạn vừa tìm: $it", Toast.LENGTH_SHORT).show()
+                    val fragment = childFragmentManager.findFragmentById(R.id.childFragmentContainer)
+                    if (fragment is SearchFragment2){
+                        fragment.searchUsersByQuery(it)
+                    }
                     saveSearchHistory(it)
                     updateSearchHistoryFragment()
                 }
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(query: String?): Boolean {
                 return false
             }
 
