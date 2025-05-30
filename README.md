@@ -39,6 +39,12 @@ Download apk:
     <td><img src="screenshots/img23.png"/></td>
     <td><img src="screenshots/img24.png"/></td>
   </tr>
+  <tr>
+    <td><img src="screenshots/img28.png"/></td>
+    <td><img src="screenshots/img25.png"/></td>
+    <td><img src="screenshots/img26.png"/></td>
+    <td><img src="screenshots/img27.png"/></td>
+  </tr>
 </table>
 
   
