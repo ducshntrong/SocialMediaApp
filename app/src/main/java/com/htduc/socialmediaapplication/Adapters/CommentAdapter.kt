@@ -1,12 +1,14 @@
 package com.htduc.socialmediaapplication.Adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.marlonlom.utilities.timeago.TimeAgo
 import com.google.firebase.auth.FirebaseAuth
@@ -14,6 +16,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.htduc.socialmediaapplication.Activities.ImageDetailActivity
 import com.htduc.socialmediaapplication.Activities.ProfileActivity
 import com.htduc.socialmediaapplication.Models.Comment
 import com.htduc.socialmediaapplication.Models.User
@@ -94,6 +97,18 @@ class CommentAdapter(val context: Context): RecyclerView.Adapter<CommentAdapter.
         }
         holder.username.setOnClickListener {
             clickToProfileUser(comment, holder.user!!)
+        }
+
+        holder.imgCmt.setOnClickListener {
+            val intent = Intent(context, ImageDetailActivity::class.java)
+            intent.putExtra("comment_img", comment.commentImg)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                (context as Activity),
+                holder.imgCmt,      // view dùng để chuyển tiếp
+                "postImageTransition"  // tên transitionName phải giống ở cả 2 Activity
+            )
+            context.startActivity(intent, options.toBundle())
         }
     }
 

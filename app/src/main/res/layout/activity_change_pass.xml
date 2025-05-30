@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".Activities.ChangePassActivity">
 
     <ImageView
@@ -47,7 +48,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnConfirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

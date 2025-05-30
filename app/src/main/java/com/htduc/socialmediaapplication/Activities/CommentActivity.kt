@@ -1,6 +1,8 @@
 package com.htduc.socialmediaapplication.Activities
 
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -134,6 +137,22 @@ class CommentActivity : AppCompatActivity() {
         }
         applyClickAnimation(this, binding.attachment){
             imagePickCallback.launch("image/*")
+        }
+
+        binding.imgPost.setOnClickListener {
+            //lấy dữ liệu post hiện tại từ LiveData
+            commentViewModel.post.value?.let { post ->
+                val intent = Intent(this, ImageDetailActivity::class.java)
+                intent.putExtra("post", post)
+
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    binding.imgPost,      // view dùng để chuyển tiếp
+                    "postImageTransition"  // tên transitionName phải giống ở cả 2 Activity
+                )
+                startActivity(intent, options.toBundle())
+
+            }
         }
 
         binding.like.setOnClickListener {}

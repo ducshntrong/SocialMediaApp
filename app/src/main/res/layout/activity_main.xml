@@ -11,17 +11,66 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp" />
+        android:layout_marginBottom="55dp"
+        android:layout_gravity="top"/>
 
-    <com.iammert.library.readablebottombar.ReadableBottomBar
-        android:id="@+id/readableBottomBar"
+
+    <com.nafis.bottomnavigation.NafisBottomNavigation
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom"
-        app:rbb_activeItemType="text"
-        app:rbb_backgroundColor="@color/green"
-        app:rbb_indicatorColor="@color/orange"
-        app:rbb_tabs="@xml/tabs"
-        app:rbb_textColor="@color/orange" />
+        android:layout_height="wrap_content"
+        app:mbn_circleColor="#ffffff"
+        app:mbn_backgroundBottomColor="@color/green"
+        app:mbn_countBackgroundColor="#ff6f00"
+        app:mbn_countTextColor="#ffffff"
+        app:mbn_countTypeface="fonts/SourceSansPro-Regular.ttf"
+        app:mbn_defaultIconColor="@color/white"
+        app:mbn_rippleColor="#2f424242"
+        app:mbn_selectedIconColor="@color/orange"
+        app:mbn_shadowColor="#1f212121"
+        app:mbn_hasAnimation="true"
+        android:layout_gravity="bottom"/>
+<!--    <com.iammert.library.readablebottombar.ReadableBottomBar-->
+<!--        android:id="@+id/readableBottomBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="56dp"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        app:rbb_activeItemType="text"-->
+<!--        app:rbb_backgroundColor="@color/green"-->
+<!--        app:rbb_indicatorColor="@color/orange"-->
+<!--        app:rbb_tabs="@xml/tabs"-->
+<!--        app:rbb_textColor="@color/orange" />-->
+
+<!--    <com.google.android.material.bottomappbar.BottomAppBar-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/bottomAppBar"-->
+<!--        app:fabAlignmentMode="center"-->
+<!--        app:fabAnchorMode="cradle"-->
+<!--        app:fabCradleMargin="14dp"-->
+<!--        app:fabCradleVerticalOffset="10dp"-->
+<!--        app:fabCradleRoundedCornerRadius="6dp"-->
+<!--        android:layout_gravity="bottom">-->
+
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/bottomNavigationView"-->
+<!--            android:layout_marginEnd="12dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            app:menu="@menu/bottom_menu"-->
+<!--            app:labelVisibilityMode="labeled"-->
+<!--            android:elevation="0dp"/>-->
+
+<!--    </com.google.android.material.bottomappbar.BottomAppBar>-->
+
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:backgroundTint="@color/white"-->
+<!--        android:src="@drawable/baseline_add_24"-->
+<!--        app:layout_anchor="@id/bottomAppBar"-->
+<!--        app:maxImageSize="40dp"-->
+<!--        android:tint="@color/green"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

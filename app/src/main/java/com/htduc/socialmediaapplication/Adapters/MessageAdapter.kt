@@ -1,16 +1,21 @@
 package com.htduc.socialmediaapplication.Adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.htduc.socialmediaapplication.Activities.ImageDetailActivity
 import com.htduc.socialmediaapplication.Models.Messages
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.databinding.DeleteLayout2Binding
@@ -98,6 +103,17 @@ class MessageAdapter(val cont: Context, private var messages:ArrayList<Messages>
                     actionOnLongClickSend(message)
                     false
                 }
+                holder.imgSent.setOnClickListener {
+                    val intent = Intent(cont, ImageDetailActivity::class.java)
+                    intent.putExtra("message", message)
+
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (cont as Activity),
+                        holder.imgSent,      // view dùng để chuyển tiếp
+                        "postImageTransition"  // tên transitionName phải giống ở cả 2 Activity
+                    )
+                    cont.startActivity(intent, options.toBundle())
+                }
             }
 
             is ReceiveMsgHolder -> {
@@ -119,6 +135,17 @@ class MessageAdapter(val cont: Context, private var messages:ArrayList<Messages>
                 holder.rootReceive.setOnLongClickListener {
                     actionOnLongClickReceive(message)
                     false
+                }
+                holder.imgReceive.setOnClickListener {
+                    val intent = Intent(cont, ImageDetailActivity::class.java)
+                    intent.putExtra("message", message)
+
+                    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (cont as Activity),
+                        holder.imgReceive,      // view dùng để chuyển tiếp
+                        "postImageTransition"  // tên transitionName phải giống ở cả 2 Activity
+                    )
+                    cont.startActivity(intent, options.toBundle())
                 }
             }
         }

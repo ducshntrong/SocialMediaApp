@@ -1,6 +1,7 @@
 package com.htduc.socialmediaapplication.Adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,6 +20,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.htduc.socialmediaapplication.Activities.CommentActivity
+import com.htduc.socialmediaapplication.Activities.ImageDetailActivity
 import com.htduc.socialmediaapplication.Activities.ProfileActivity
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
 import com.htduc.socialmediaapplication.Models.Notification
@@ -33,6 +36,8 @@ import java.util.Date
 
 class PostAdapter(private val context: Context, private var listPost: ArrayList<Post>)
     :RecyclerView.Adapter<PostAdapter.DashboardHolder>() {
+
+    //Lưu thông tin user đã tải vào cache (bộ nhớ tạm).
     private val userCache = mutableMapOf<String, User>()
     private val userListeners = mutableMapOf<String, ValueEventListener>()
 
@@ -105,9 +110,10 @@ class PostAdapter(private val context: Context, private var listPost: ArrayList<
             val userRef = FirebaseDatabase.getInstance().reference.child("Users").child(postedById)
 
             // Nếu đã có trong cache
-            if (userCache.containsKey(postedById)) {
+            if (userCache.containsKey(postedById)) {//Ktra xem user này đã từng được load chưa.
                 val user = userCache[postedById]
                 holder.user = user
+                //Nếu đã có trong cache, dùng lại để gán thông tin (khỏi cần gọi Firebase).
                 Picasso.get().load(user?.profilePhoto)
                     .placeholder(R.drawable.avt)
                     .into(holder.profile)
@@ -176,13 +182,25 @@ class PostAdapter(private val context: Context, private var listPost: ArrayList<
             bottomSheet.show((context as AppCompatActivity).supportFragmentManager, "MoreOptionsBottomSheetPost")
         }
 
+        holder.postImage.setOnClickListener {
+            val intent = Intent(context, ImageDetailActivity::class.java)
+            intent.putExtra("post", post)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                (context as Activity),
+                holder.postImage,      // view dùng để chuyển tiếp
+                "postImageTransition"  // tên transitionName phải giống ở cả 2 Activity
+            )
+            context.startActivity(intent, options.toBundle())
+        }
+
         holder.layoutUser.setOnClickListener {
             if (post.postedBy == FirebaseAuth.getInstance().uid){
                 (context as AppCompatActivity).supportFragmentManager
                     .beginTransaction().replace(R.id.frameLayout, ProfileFragment()).commit()
                 // Chọn Tab tương ứng trong Bottom Navigation Bar
-                context.findViewById<ReadableBottomBar>(R.id.readableBottomBar)
-                    .selectItem(4)
+//                context.findViewById<ReadableBottomBar>(R.id.readableBottomBar)
+//                    .selectItem(4)
             }else{
                 val intent = Intent(context, ProfileActivity::class.java)
                 val bundle = Bundle()
@@ -206,8 +224,6 @@ class PostAdapter(private val context: Context, private var listPost: ArrayList<
             }
         }
     }
-
-
 
     private fun updateLikeCount(postId: String, delta: Int, holder: DashboardHolder) {
         val postLikeRef = FirebaseDatabase.getInstance().reference

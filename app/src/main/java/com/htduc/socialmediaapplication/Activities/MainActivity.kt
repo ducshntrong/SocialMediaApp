@@ -1,25 +1,27 @@
 package com.htduc.socialmediaapplication.Activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.badge.BadgeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.htduc.socialmediaapplication.Fragments.HomeFragment
 import com.htduc.socialmediaapplication.Fragments.MainSearchFragment
 import com.htduc.socialmediaapplication.Fragments.Notification2Fragment
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
-import com.htduc.socialmediaapplication.Fragments.SearchFragment
 import com.htduc.socialmediaapplication.Fragments.StoryFragment
-import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
-import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
+import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
 import com.htduc.socialmediaapplication.ViewmodelFactories.ChatViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
 import com.htduc.socialmediaapplication.moderation.TextClassifier
 import com.htduc.socialmediaapplication.moderation.UserModerationManager
-import com.iammert.library.readablebottombar.ReadableBottomBar
+import com.nafis.bottomnavigation.NafisBottomNavigation
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,12 +30,20 @@ class MainActivity : AppCompatActivity() {
     private var currentId: String? = null
     private lateinit var userModerationManager: UserModerationManager
     private lateinit var textClassifier: TextClassifier
+    private lateinit var badgeDrawable: BadgeDrawable
+
+    private lateinit var fragmentViewModel: FragmentViewModel
 
     private lateinit var chatViewModel: ChatViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        fragmentViewModel = ViewModelProvider(
+            this,
+            FragmentViewModelFactory(application, this)
+        )[FragmentViewModel::class.java]
         setContentView(binding.root)
+
         chatViewModel = ViewModelProvider(this, ChatViewModelFactory(this))[ChatViewModel::class.java]
         chatViewModel.deleteExpiredNotes()//goi ham de ktr va xoa note khi qua tgian 24h
 
@@ -41,49 +51,67 @@ class MainActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
         currentId = auth.uid
 
-        textClassifier = TextClassifier(this)
-        val t = textClassifier.cleanTextIfToxic("thằng lol rô đĩ ăn cứt chó", "caption")
-        Toast.makeText(this, t, Toast.LENGTH_SHORT).show()
-
         userModerationManager = UserModerationManager(database, this)
 //        setSupportActionBar(binding.toolbar)
 //        supportActionBar?.title = "My Profile"
-        replaceFragment(HomeFragment())
 //        binding.toolbar.visibility = View.GONE
 
-        //ReadableBottomBar
-        binding.readableBottomBar.setOnItemSelectListener(object: ReadableBottomBar.ItemSelectListener{
-            override fun onItemSelected(index: Int) {
-                when(index){
-                    0 -> {
-                        //binding.toolbar.visibility = View.GONE
-                        replaceFragment(HomeFragment())
-                    }
-                    1 -> {
-                        //binding.toolbar.visibility = View.GONE
-                        replaceFragment(Notification2Fragment())
-                    }
-                    2 -> {
-                        //binding.toolbar.visibility = View.GONE
-                        replaceFragment(StoryFragment())
-                    }
-                    3 -> {
-                        //binding.toolbar.visibility = View.GONE
-                        replaceFragment(MainSearchFragment())
-                    }
-                    4 -> {
-                        //binding.toolbar.visibility = View.VISIBLE
-                        replaceFragment(ProfileFragment())
-                    }
+        binding.bottomNavigation.add(NafisBottomNavigation.Model(1,
+                com.htduc.socialmediaapplication.R.drawable.ic_home)
+        )
+        binding.bottomNavigation.add(NafisBottomNavigation.Model(2,
+                com.htduc.socialmediaapplication.R.drawable.ic_notification)
+        )
+        binding.bottomNavigation.add(NafisBottomNavigation.Model(3,
+                com.htduc.socialmediaapplication.R.drawable.baseline_add_24)
+        )
+        binding.bottomNavigation.add(NafisBottomNavigation.Model(4,
+                com.htduc.socialmediaapplication.R.drawable.ic_search)
+        )
+        binding.bottomNavigation.add(NafisBottomNavigation.Model(5,
+                com.htduc.socialmediaapplication.R.drawable.ic_profile)
+        )
+
+        replaceFragment(HomeFragment())
+        binding.bottomNavigation.show(1);
+
+        // Observe danh sách notification thay đổi để cập nhật badge
+        fragmentViewModel.listNotification.observe(this) { notifications ->
+            // Lọc số thông báo chưa mở
+            val unreadCount = notifications.count { !it.checkOpen }
+
+            if (unreadCount > 0) {
+                binding.bottomNavigation.setCount(2, unreadCount.toString())
+            } else {
+                binding.bottomNavigation.clearAllCounts()
+            }
+        }
+
+        binding.bottomNavigation.setOnClickMenuListener { model: NafisBottomNavigation.Model ->
+            when (model.id) {
+                1 -> {
+                    replaceFragment(HomeFragment())
+                }
+                2 -> {
+                    replaceFragment(Notification2Fragment())
+                }
+                3 -> {
+                    replaceFragment(StoryFragment())
+                }
+                4 -> {
+                    replaceFragment(MainSearchFragment())
+                }
+                5 -> {
+                    replaceFragment(ProfileFragment())
                 }
             }
+        }
 
-        })
     }
 
     private fun replaceFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frameLayout, fragment)
+            replace(com.htduc.socialmediaapplication.R.id.frameLayout, fragment)
             commit()
         }
     }
@@ -145,3 +173,32 @@ class MainActivity : AppCompatActivity() {
 //        sendBroadcast(intent)
 //    }
 }
+
+//ReadableBottomBar
+//        binding.readableBottomBar.setOnItemSelectListener(object: ReadableBottomBar.ItemSelectListener{
+//            override fun onItemSelected(index: Int) {
+//                when(index){
+//                    0 -> {
+//                        //binding.toolbar.visibility = View.GONE
+//                        replaceFragment(HomeFragment())
+//                    }
+//                    1 -> {
+//                        //binding.toolbar.visibility = View.GONE
+//                        replaceFragment(Notification2Fragment())
+//                    }
+//                    2 -> {
+//                        //binding.toolbar.visibility = View.GONE
+//                        replaceFragment(StoryFragment())
+//                    }
+//                    3 -> {
+//                        //binding.toolbar.visibility = View.GONE
+//                        replaceFragment(MainSearchFragment())
+//                    }
+//                    4 -> {
+//                        //binding.toolbar.visibility = View.VISIBLE
+//                        replaceFragment(ProfileFragment())
+//                    }
+//                }
+//            }
+//
+//        })
