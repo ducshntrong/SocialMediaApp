@@ -27,24 +27,48 @@
 
 > 👉 **[APK Download link – Coming Soon]**
 
-<table>
+<table style="width:100%">
   <tr>
+    <td><img src="screenshots/img14.jpg"/></td>
     <td><img src="screenshots/img1.jpg"/></td>
     <td><img src="screenshots/img2.jpg"/></td>
     <td><img src="screenshots/img3.jpg"/></td>
-    <td><img src="screenshots/img4.png"/></td>
   </tr>
   <tr>
+    <td><img src="screenshots/img4.png"/></td>
     <td><img src="screenshots/img5.jpg"/></td>
     <td><img src="screenshots/img6.jpg"/></td>
     <td><img src="screenshots/img7.jpg"/></td>
-    <td><img src="screenshots/img8.jpg"/></td>
   </tr>
   <tr>
+    <td><img src="screenshots/img8.jpg"/></td>
     <td><img src="screenshots/img9.jpg"/></td>
     <td><img src="screenshots/img10.jpg"/></td>
     <td><img src="screenshots/img11.jpg"/></td>
+  </tr>
+  <tr>
     <td><img src="screenshots/img12.jpg"/></td>
+    <td><img src="screenshots/img13.jpg"/></td>
+    <td><img src="screenshots/img14.jpg"/></td>
+    <td><img src="screenshots/img16.jpg"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img17.jpg"/></td>
+    <td><img src="screenshots/img18.jpg"/></td>
+    <td><img src="screenshots/img25.png"/></td>
+    <td><img src="screenshots/img20.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img21.png"/></td>
+    <td><img src="screenshots/img22.png"/></td>
+    <td><img src="screenshots/img23.png"/></td>
+    <td><img src="screenshots/img24.png"/></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/img28.png"/></td>
+    <td><img src="screenshots/img25.png"/></td>
+    <td><img src="screenshots/img26.png"/></td>
+    <td><img src="screenshots/img27.png"/></td>
   </tr>
 </table>
 
