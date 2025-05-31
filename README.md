@@ -1,8 +1,9 @@
 # 📱 SocialMediaApp
 
 **SocialMediaApp** is a mobile social networking application that allows users to connect, share content, and communicate with each other. It comes with features like stories, posts, comments, messaging, and AI-based content moderation.
-For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com 
 ---
+
+For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com 
 
 ## 🚀 Key Features
 
