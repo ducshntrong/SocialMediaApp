@@ -97,8 +97,12 @@
 - Android Studio Flamingo or later
 - JDK 11+
 - Firebase project (with `google-services.json`)
+- Android SDK (API level 33+ recommended)
+
+For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com 
 
 ### Steps:
 ```bash
 git clone https://github.com/ducshntrong/SocialMediaApp.git
 cd SocialMediaApp
+
