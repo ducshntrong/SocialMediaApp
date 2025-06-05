@@ -21,6 +21,7 @@ For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com
 - 🔍 Search Functionality:
   - Search Users by name or occupation
   - Search Posts by caption or content
+- 🕘 Search History – Save & Display recent searches
 - 🤖 AI Integration:
   - NSFW Content Detection
   - Sentiment Analysis for Comments
