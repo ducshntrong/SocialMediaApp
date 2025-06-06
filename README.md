@@ -15,7 +15,6 @@ For Feedback or Suggestions Mail Me At huynhtrongduc01225445811@gmail.com
 - 💬 Real-time Chat / Messenger
 - 🔔 Notification System
 - 🧑 Personal Profile Management
-- 📅 JobScheduler – Background Task Management
 - 🟢 Online / Offline Active Status
 - 🗒️ Personal Notes
 - 🔍 Search Functionality:
