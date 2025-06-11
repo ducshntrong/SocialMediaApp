@@ -78,7 +78,8 @@
         diagonal:layout_constraintBottom_toBottomOf="@+id/imgStatus"
         diagonal:layout_constraintEnd_toEndOf="@+id/imgStatus"
         diagonal:layout_constraintStart_toStartOf="@+id/imgStatus"
-        diagonal:layout_constraintTop_toTopOf="@+id/imgStatus" />
+        diagonal:layout_constraintTop_toTopOf="@+id/imgStatus"
+        diagonal:tint="@color/black" />
 
     <TextView
         android:id="@+id/username"

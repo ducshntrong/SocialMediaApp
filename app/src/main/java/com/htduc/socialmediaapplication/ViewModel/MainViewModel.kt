@@ -30,7 +30,7 @@ import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import java.util.Date
 import android.util.Log
 
-class FragmentViewModel(application: Application,private val context: Context): AndroidViewModel(application) {
+class MainViewModel(application: Application, private val context: Context): AndroidViewModel(application) {
     @SuppressLint("StaticFieldLeak")
     private val database = FirebaseDatabase.getInstance()
     private val auth = FirebaseAuth.getInstance()

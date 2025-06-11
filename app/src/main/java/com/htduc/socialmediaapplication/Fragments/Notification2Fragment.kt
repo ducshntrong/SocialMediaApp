@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.htduc.socialmediaapplication.Adapters.NotificationAdapter
 import com.htduc.socialmediaapplication.Models.Notification
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentNotification2Binding
 
 
@@ -18,7 +18,7 @@ class Notification2Fragment : Fragment() {
     private lateinit var binding: FragmentNotification2Binding
     private lateinit var notificationAdapter: NotificationAdapter
     private var listNotifi = arrayListOf<Notification>()
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +32,8 @@ class Notification2Fragment : Fragment() {
         binding = FragmentNotification2Binding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
         return binding.root
     }
 

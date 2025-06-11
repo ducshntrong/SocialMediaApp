@@ -22,14 +22,14 @@ import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.Models.Story
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentHomeBinding
 import com.squareup.picasso.Picasso
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var storyAdapter: StoryAdapter
     private lateinit var postAdapter: PostAdapter
     private var listStory = arrayListOf<Story>()
@@ -51,8 +51,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             requireActivity(),
-            FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
 
         dialog = ProgressDialog(requireContext(), ProgressDialog.STYLE_SPINNER)
         dialog?.setTitle("Story Uploading")

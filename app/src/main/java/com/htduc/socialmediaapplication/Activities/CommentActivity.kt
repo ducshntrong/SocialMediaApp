@@ -1,6 +1,5 @@
 package com.htduc.socialmediaapplication.Activities
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -24,8 +23,8 @@ import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.moderation.UserModerationManager
 import com.htduc.socialmediaapplication.ViewModel.CommentViewModel
 import com.htduc.socialmediaapplication.ViewmodelFactories.CommentViewmodelFactory
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.ActivityCommentBinding
 import com.squareup.picasso.Picasso
 
@@ -40,7 +39,7 @@ class CommentActivity : AppCompatActivity() {
     private var postedBy:String? = null
     private lateinit var commentAdapter: CommentAdapter
     private var listComment = arrayListOf<Comment>()
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var commentViewModel: CommentViewModel
     private lateinit var userModerationManager: UserModerationManager
 
@@ -62,8 +61,8 @@ class CommentActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         //commentViewModel = ViewModelProvider(this)[CommentViewModel::class.java]
         commentViewModel = ViewModelProvider(this, CommentViewmodelFactory(this))[CommentViewModel::class.java]
 

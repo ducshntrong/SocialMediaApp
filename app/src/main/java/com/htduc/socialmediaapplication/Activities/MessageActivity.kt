@@ -13,16 +13,16 @@ import com.htduc.socialmediaapplication.Adapters.UserChatAdapter
 import com.htduc.socialmediaapplication.Adapters.ChatListAdapter
 import com.htduc.socialmediaapplication.Models.Chats
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityMessageBinding
 import com.htduc.socialmediaapplication.ViewmodelFactories.ChatViewModelFactory
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 
 class MessageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMessageBinding
     private lateinit var userAdapter: UserChatAdapter
     private lateinit var chatListAdapter: ChatListAdapter
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var chatViewModel: ChatViewModel
     private val chatList = ArrayList<Chats>()
     private lateinit var auth: FirebaseAuth
@@ -43,8 +43,8 @@ class MessageActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         chatViewModel = ViewModelProvider(this, ChatViewModelFactory(this))[ChatViewModel::class.java]
 
         binding.imgBack.setOnClickListener { finish() }

@@ -16,8 +16,8 @@ import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityProfileBinding
 import com.squareup.picasso.Picasso
@@ -33,7 +33,7 @@ class ProfileActivity : AppCompatActivity() {
     private var listFollowers = arrayListOf<Follow>()
     private lateinit var postAdapter: PostAdapter
     private  var currentUserPostList  = arrayListOf<Post>()
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,8 +46,8 @@ class ProfileActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java] 
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         currentId = auth.uid
 

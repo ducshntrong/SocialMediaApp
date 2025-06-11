@@ -15,14 +15,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.htduc.socialmediaapplication.Activities.UpdatePostActivity
 import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.BottomSheetPostBinding
 
 class MoreOptionsBottomSheetPost(private val context: Context, private val post: Post) : BottomSheetDialogFragment(){
     private lateinit var  binding: BottomSheetPostBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +37,8 @@ class MoreOptionsBottomSheetPost(private val context: Context, private val post:
         binding = BottomSheetPostBinding.inflate(layoutInflater, container, false)
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
         auth = FirebaseAuth.getInstance()
         val currentUserId = auth.currentUser?.uid
 

@@ -1,7 +1,6 @@
 package com.htduc.socialmediaapplication.Activities
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,11 +13,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
-import com.htduc.socialmediaapplication.Models.User
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.ActivityUpdateProfileBinding
 import com.squareup.picasso.Picasso
@@ -32,7 +30,7 @@ class UpdateProfileActivity : AppCompatActivity() {
     private var profilePhoto: Uri? = null
     private var dialog: ProgressDialog? = null
     private var currentId: String? = null
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var profileViewModel: ProfileViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +45,8 @@ class UpdateProfileActivity : AppCompatActivity() {
         storage = FirebaseStorage.getInstance()
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         currentId = auth.uid
 

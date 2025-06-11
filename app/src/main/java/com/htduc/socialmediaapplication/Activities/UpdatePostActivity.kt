@@ -16,14 +16,14 @@ import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
 import com.htduc.socialmediaapplication.ViewModel.CommentViewModel
 import com.htduc.socialmediaapplication.ViewmodelFactories.CommentViewmodelFactory
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.ActivityUpdatePostBinding
 import com.squareup.picasso.Picasso
 
 class UpdatePostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdatePostBinding
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var commentViewModel: CommentViewModel
     private lateinit var post :Post
     private var selectImg: Uri? = null
@@ -42,8 +42,8 @@ class UpdatePostActivity : AppCompatActivity() {
         post = intent.getParcelableExtra("post_data")!!
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         commentViewModel = ViewModelProviders.of(this,
             CommentViewmodelFactory(this.application)
         )[CommentViewModel::class.java]

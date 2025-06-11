@@ -22,15 +22,15 @@ import com.htduc.socialmediaapplication.Models.Follow
 import com.htduc.socialmediaapplication.Models.Post
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
 import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.ViewModel.ProfileViewModel
 import com.htduc.socialmediaapplication.databinding.FragmentProfileBinding
 import com.squareup.picasso.Picasso
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var profileViewModel: ProfileViewModel
     private lateinit var followAdapter: FollowAdapter
     private var listFollowers = arrayListOf<Follow>()
@@ -61,8 +61,8 @@ class ProfileFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
         profileViewModel = ViewModelProvider(requireActivity())[ProfileViewModel::class.java]
         return binding.root
     }

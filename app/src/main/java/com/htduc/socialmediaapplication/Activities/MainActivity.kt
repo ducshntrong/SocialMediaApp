@@ -1,7 +1,6 @@
 package com.htduc.socialmediaapplication.Activities
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -14,9 +13,9 @@ import com.htduc.socialmediaapplication.Fragments.Notification2Fragment
 import com.htduc.socialmediaapplication.Fragments.ProfileFragment
 import com.htduc.socialmediaapplication.Fragments.StoryFragment
 import com.htduc.socialmediaapplication.ViewModel.ChatViewModel
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
 import com.htduc.socialmediaapplication.ViewmodelFactories.ChatViewModelFactory
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.ActivityMainBinding
 import com.htduc.socialmediaapplication.moderation.TextClassifier
 import com.htduc.socialmediaapplication.moderation.UserModerationManager
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textClassifier: TextClassifier
     private lateinit var badgeDrawable: BadgeDrawable
 
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
 
     private lateinit var chatViewModel: ChatViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(
             this,
-            FragmentViewModelFactory(application, this)
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(application, this)
+        )[MainViewModel::class.java]
         setContentView(binding.root)
 
         chatViewModel = ViewModelProvider(this, ChatViewModelFactory(this))[ChatViewModel::class.java]

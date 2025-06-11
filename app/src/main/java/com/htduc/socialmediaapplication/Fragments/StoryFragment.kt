@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.htduc.socialmediaapplication.Adapters.StoryAdapter2
 import com.htduc.socialmediaapplication.Models.Story
 import com.htduc.socialmediaapplication.Models.applyClickAnimation
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
 import com.htduc.socialmediaapplication.databinding.FragmentStoryBinding
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 
 class StoryFragment : Fragment() {
     private lateinit var binding: FragmentStoryBinding
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
     private lateinit var storyAdapter: StoryAdapter2
     private var listStory = arrayListOf<Story>()
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
@@ -42,8 +42,8 @@ class StoryFragment : Fragment() {
         dialog?.setMessage("Please Wait...")
         dialog?.setCancelable(false)
         fragmentViewModel = ViewModelProvider(
-            this, FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            this, MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
         return binding.root
     }
 

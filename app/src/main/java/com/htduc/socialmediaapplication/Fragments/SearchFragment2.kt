@@ -7,18 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.Query
 import com.htduc.socialmediaapplication.Adapters.PostAdapter
 import com.htduc.socialmediaapplication.Adapters.SearchHistoryAdapter
 import com.htduc.socialmediaapplication.Adapters.SearchUserAdapter
 import com.htduc.socialmediaapplication.Models.Post
-import com.htduc.socialmediaapplication.R
-import com.htduc.socialmediaapplication.ViewModel.FragmentViewModel
-import com.htduc.socialmediaapplication.ViewmodelFactories.FragmentViewModelFactory
+import com.htduc.socialmediaapplication.ViewModel.MainViewModel
+import com.htduc.socialmediaapplication.ViewmodelFactories.MainViewModelFactory
 import com.htduc.socialmediaapplication.databinding.FragmentSearch2Binding
 
 class SearchFragment2 : Fragment() {
@@ -28,7 +25,7 @@ class SearchFragment2 : Fragment() {
     private lateinit var postAdapter: PostAdapter
     private val historyList = mutableListOf<String>()
     private var listPost = arrayListOf<Post>()
-    private lateinit var fragmentViewModel: FragmentViewModel
+    private lateinit var fragmentViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +38,8 @@ class SearchFragment2 : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSearch2Binding.inflate(layoutInflater)
         fragmentViewModel = ViewModelProvider(this,
-            FragmentViewModelFactory(requireActivity().application, requireContext())
-        )[FragmentViewModel::class.java]
+            MainViewModelFactory(requireActivity().application, requireContext())
+        )[MainViewModel::class.java]
         return binding.root
     }
 
